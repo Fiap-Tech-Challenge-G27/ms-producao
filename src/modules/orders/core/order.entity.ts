@@ -1,4 +1,3 @@
-import { CustomerEntity } from "@customers/core/customer.entity";
 import { ProductEntity } from "@products/core/product.entity";
 import { Entity } from "@shared/core/entity";
 
@@ -26,7 +25,7 @@ export class OrderProductEntity extends Entity {
   }
 }
 export class OrderEntity extends Entity {
-  customer: CustomerEntity;
+  customerId: string;
   orderProducts: OrderProductEntity[];
   state: OrderState;
   paymentState: PaymentState;
@@ -36,13 +35,13 @@ export class OrderEntity extends Entity {
   updatedAt: Date;
 
   constructor(
-    customer: CustomerEntity,
+    customerId: string,
     orderProducts: OrderProductEntity[],
     state: OrderState = OrderState.Received,
     paymentState: PaymentState = PaymentState.Pending,
   ) {
     super();
-    this.customer = customer;
+    this.customerId = customerId;
     this.orderProducts = orderProducts;
     this.state = state;
     this.paymentState = paymentState;

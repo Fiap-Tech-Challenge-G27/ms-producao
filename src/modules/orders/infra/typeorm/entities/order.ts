@@ -2,14 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { OrdersProductsAmounts } from "./orders-products-amounts";
-import { Customer } from "@customers/infra/typeorm/entities/customer";
 import { OrderState, PaymentState } from "@orders/core/order.entity";
 
 @Entity({ name: "orders" })
@@ -36,9 +33,8 @@ export class Order {
   })
   paymentState: PaymentState;
 
-  @ManyToOne(() => Customer, { eager: true, nullable: false })
-  @JoinColumn({ name: "customer_id" })
-  customer: Customer;
+  @Column({ type: "uuid" })
+  customerId: string;
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
   createdAt: Date;

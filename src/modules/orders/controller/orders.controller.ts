@@ -14,7 +14,7 @@ import { AuthGuard } from "@modules/auth/auth.guard";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateOrderDto } from "src/modules/orders/dtos/create-order.dto";
 import { FindOrderUseCase } from "../use-cases/find-order.usecase";
-import { UpdateOrderDto } from "../dtos/update-customer.dto";
+import { UpdateOrderDto } from "../dtos/update-order.dto";
 import { PaymentConfirmationDto } from "../dtos/payment-confirmation.dto";
 import { UpdateOrderUseCase } from "../use-cases/update-order.usecase";
 import { ConfirmatePaymentUseCase } from "../use-cases/confimate-payment.usecase";
@@ -34,14 +34,14 @@ export class OrdersController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   create(@Body() createOrdersDto: CreateOrderDto, @Request() req) {
-    return this.createOrderUseCase.execute(createOrdersDto, req.customer.data);
+    return this.createOrderUseCase.execute(createOrdersDto, req.customer.data.id);
   }
 
   @Get()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   findAll(@Request() req) {
-    return this.findAllOrdersUseCase.execute(req.customer.data);
+    return this.findAllOrdersUseCase.execute(req.customer.data.id);
   }
 
   @Get(":id")

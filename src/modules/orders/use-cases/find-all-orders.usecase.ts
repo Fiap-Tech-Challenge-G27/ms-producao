@@ -2,7 +2,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { UseCase } from "@shared/core/use-case";
 import { IOrderRepository } from "../core/order-repository.abstract";
 import { OrderEntity } from "../core/order.entity";
-import { CustomerEntity } from "@modules/customers/core/customer.entity";
 
 @Injectable()
 export class FindAllOrdersUseCase implements UseCase {
@@ -17,8 +16,8 @@ export class FindAllOrdersUseCase implements UseCase {
     Received: 2,
   };
 
-  async execute(customer: CustomerEntity) {
-    const orders = await this.orderRepository.findAllByCustomerId(customer.id);
+  async execute(customerId: string) {
+    const orders = await this.orderRepository.findAllByCustomerId(customerId);
 
     const filteredOrders = orders.filter(
       (order: OrderEntity) => order.state !== "Finished",

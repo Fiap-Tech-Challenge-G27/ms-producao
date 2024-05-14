@@ -3,7 +3,7 @@ import { IExceptionService } from "src/shared/exceptions/exceptions.interface";
 import { UseCase } from "@shared/core/use-case";
 import { OrderMapper } from "../core/mappers/order.mapper";
 import { IOrderRepository } from "../core/order-repository.abstract";
-import { UpdateOrderDto } from "../dtos/update-customer.dto";
+import { UpdateOrderDto } from "../dtos/update-order.dto";
 
 @Injectable()
 export class UpdateOrderUseCase implements UseCase {
@@ -37,8 +37,6 @@ export class UpdateOrderUseCase implements UseCase {
 
     const updatedOrder = { ...orderExists, ...fieldsToUpdate };
 
-    const updatedCustomer = await this.orderRepository.update(id, updatedOrder);
-
-    return updatedCustomer;
+    return await this.orderRepository.update(id, updatedOrder);
   }
 }

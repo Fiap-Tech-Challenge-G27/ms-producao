@@ -5,7 +5,6 @@ import { IOrderRepository } from "@orders/core/order-repository.abstract";
 import { Repository } from "typeorm";
 import { Order } from "../entities/order";
 import { OrdersProductsAmounts } from "../entities/orders-products-amounts";
-import { CustomerEntity } from "@customers/core/customer.entity";
 import { ProductEntity } from "@products/core/product.entity";
 import { CategoryEntity } from "@categories/core/category.entity";
 
@@ -67,7 +66,7 @@ export class OrderRepository implements IOrderRepository {
 
   async findAllByCustomerId(customerId: string): Promise<OrderEntity[]> {
     const orders = await this.orderRepository.find({
-      where: { customer: { id: customerId } },
+      where: { customerId: customerId },
       relations: {
         orders_products_amounts: {
           product: {
@@ -106,11 +105,7 @@ export class OrderRepository implements IOrderRepository {
   mapModelToEntity(orderModel: Order): OrderEntity {
     if (!orderModel) return null;
     const order = new OrderEntity(
-      new CustomerEntity(
-        orderModel.customer.name,
-        orderModel.customer.email,
-        orderModel.customer.cpf,
-      ),
+      orderModel.customerId,
       orderModel.orders_products_amounts.map(function (item) {
         const productItem = item.product;
         const categoryItem = item.product.category;
@@ -145,7 +140,7 @@ export class OrderRepository implements IOrderRepository {
     const orderModel = new Order();
     orderModel.state = dataEntity.state;
     orderModel.paymentState = dataEntity.paymentState;
-    orderModel.customer = dataEntity.customer;
+    orderModel.customerId = dataEntity.customerId;
 
     return orderModel;
   }
