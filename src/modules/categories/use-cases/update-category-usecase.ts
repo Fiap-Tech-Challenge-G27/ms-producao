@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { UpdateCategoryDto } from "../dtos/update-category.dto";
-import { IExceptionService } from "src/shared/exceptions/exceptions.interface";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
 import { CategoryMapper } from "../core/category.mapper";
 import { UseCase } from "@shared/core/use-case";
 import { ICategoryRepository } from "../core/category-repository.abstract";

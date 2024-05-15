@@ -10,7 +10,7 @@ import { OrdersProductsAmounts } from "@orders/infra/typeorm/entities/orders-pro
 import { Category } from "@categories/infra/typeorm/entities/category";
 import { Product } from "@products/infra/typeorm/entities/product";
 import { ExceptionsService } from "@shared/infra/exceptions/exceptions.service";
-import { IExceptionService } from "src/shared/exceptions/exceptions.interface";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
 import { OrderMapper } from "@orders/core/mappers/order.mapper";
 import { OrderProductMapper } from "@orders/core/mappers/order-product.mapper";
 import { CreateOrderUseCase } from "./use-cases/create-order.usecase";
