@@ -1,40 +1,24 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { CategoriesController } from "../controller/categories.controller";
-import { CategoryRepository } from "../infra/typeorm/repositories/category.repository";
-import { ICategoryRepository } from "../core/category-repository.abstract";
-import { ExceptionsService } from "@infra/exceptions/exceptions.service";
-import { IExceptionService } from "@shared/exceptions/exceptions.interface";
-import { CategoryMapper } from "../core/category.mapper";
-import {
-  CreateCategoryUseCase,
-  FindAllCategoriesUseCase,
-  FindCategoryUseCase,
-  UpdateCategoryUseCase,
-} from "../use-cases";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { CategoryEntity } from "../core/category.entity";
-import { Category } from "../infra/typeorm/entities/category";
-import { Product } from "@modules/products/infra/typeorm/entities/product";
-import { Repository, UpdateResult } from "typeorm";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { CreateCategoryDto } from "../dtos/create-category.dto";
-import { CategoryProxy } from "./category.prototype";
-import { categoryMother } from "./category.mother";
 import { BadRequestException } from "@nestjs/common/exceptions/bad-request.exception";
-import {
-  basicCategoriesModuleAttributes,
-  CategoriesModule,
-} from "../categories.module";
+import { Test, TestingModule } from "@nestjs/testing";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { basicCategoriesModuleMetadata } from "../categories.module";
+import { CategoriesController } from "../controller/categories.controller";
+import { Category } from "../infra/typeorm/entities/category";
+import { categoryMother } from "./category.mother";
 
 describe("/categories", () => {
   let categoriesController: CategoriesController;
   let repositoryMock: Repository<Category>;
 
-  let moduleMetadata = { ...basicCategoriesModuleAttributes };
-  moduleMetadata.providers.push({
-    provide: getRepositoryToken(Category),
-    useClass: Repository,
-  });
+  let moduleMetadata = { ...basicCategoriesModuleMetadata };
+  moduleMetadata.providers = [
+    ...moduleMetadata.providers,
+    {
+      provide: getRepositoryToken(Category),
+      useClass: Repository,
+    },
+  ];
 
   beforeEach(async () => {
     const module: TestingModule =

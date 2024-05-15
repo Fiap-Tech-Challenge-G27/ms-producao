@@ -1,4 +1,4 @@
-import { CategoryProxy } from "./category.prototype";
+import { CategoryProxy } from "./category.proxy";
 
 export const categoryMother = {
   dessert: new CategoryProxy("dessert", "sweets and cake"),

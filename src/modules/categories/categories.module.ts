@@ -39,4 +39,4 @@ const basicCategoriesModuleMetadata = {
 })
 class CategoriesModule {}
 
-export { basicCategoriesModuleMetadata as basicCategoriesModuleAttributes, CategoriesModule };
+export { basicCategoriesModuleMetadata, CategoriesModule };
