@@ -31,6 +31,12 @@ export class CategoryProxy extends CategoryEntity {
     return result;
   }
 
+  public withSlug(slug: string) {
+    let result = this.clone();
+    result.slug = slug;
+    return result;
+  }
+
   public clone() {
     return Object.assign(Object.create(this), this)
   }

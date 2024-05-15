@@ -9,7 +9,7 @@ import { categoryMother } from "./category.mother";
 
 describe("/categories", () => {
   let categoriesController: CategoriesController;
-  let repositoryMock: Repository<Category>;
+  let categoryRepositoryMock: Repository<Category>;
 
   let moduleMetadata = { ...basicCategoriesModuleMetadata };
   moduleMetadata.providers = [
@@ -26,7 +26,7 @@ describe("/categories", () => {
 
     categoriesController =
       module.get<CategoriesController>(CategoriesController);
-    repositoryMock = module.get<Repository<Category>>(
+    categoryRepositoryMock = module.get<Repository<Category>>(
       getRepositoryToken(Category)
     );
   });
@@ -39,8 +39,10 @@ describe("/categories", () => {
     it("should create when don't exists", async () => {
       const category = categoryMother.dessert;
 
-      jest.spyOn(repositoryMock, "save").mockResolvedValueOnce(category);
-      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(null);
+      jest
+        .spyOn(categoryRepositoryMock, "save")
+        .mockResolvedValueOnce(category);
+      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValueOnce(null);
 
       const response = await categoriesController.create(
         category.asCreateDTO()
@@ -52,8 +54,12 @@ describe("/categories", () => {
     it("should error when exists", async () => {
       const category = categoryMother.dessert;
 
-      jest.spyOn(repositoryMock, "save").mockResolvedValueOnce(category);
-      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(category);
+      jest
+        .spyOn(categoryRepositoryMock, "save")
+        .mockResolvedValueOnce(category);
+      jest
+        .spyOn(categoryRepositoryMock, "findOne")
+        .mockResolvedValueOnce(category);
 
       expect(
         async () => await categoriesController.create(category.asCreateDTO())
@@ -65,7 +71,9 @@ describe("/categories", () => {
     it("should return all categories", async () => {
       const categories = [categoryMother.dessert, categoryMother.hamburger];
 
-      jest.spyOn(repositoryMock, "find").mockResolvedValueOnce(categories);
+      jest
+        .spyOn(categoryRepositoryMock, "find")
+        .mockResolvedValueOnce(categories);
 
       const response = await categoriesController.findAll();
 
@@ -76,7 +84,9 @@ describe("/categories", () => {
   describe("GET /:slug", () => {
     it("should return if exists", async () => {
       const category = categoryMother.dessert;
-      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(category);
+      jest
+        .spyOn(categoryRepositoryMock, "findOne")
+        .mockResolvedValueOnce(category);
 
       const response = await categoriesController.findOne(category.slug);
 
@@ -85,7 +95,7 @@ describe("/categories", () => {
 
     it("should error if not exists", async () => {
       const category = categoryMother.dessert;
-      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(null);
+      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValueOnce(null);
 
       expect(
         async () => await categoriesController.findOne(category.slug)
@@ -99,14 +109,41 @@ describe("/categories", () => {
       const description = "updated description";
       const updatedCategory = category.withDescription(description);
 
-      jest.spyOn(repositoryMock, "findOne").mockResolvedValue(category);
-      jest.spyOn(repositoryMock, "save").mockResolvedValue(updatedCategory);
+      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValue(category);
+      jest
+        .spyOn(categoryRepositoryMock, "save")
+        .mockResolvedValue(updatedCategory);
 
       const response = await categoriesController.update(category.id, {
         description,
       });
 
       expect(response).toEqual(updatedCategory);
+    });
+
+    it("should error when dont exists", async () => {
+      const category = categoryMother.dessert;
+      const description = "updated description";
+
+      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValue(null);
+
+      expect(
+        async () =>
+          await categoriesController.update(category.id, {
+            description,
+          })
+      ).rejects.toThrow("Category not found");
+    });
+
+    it("should error when slug already exists", async () => {
+      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValue(categoryMother.hamburger);
+
+      expect(
+        async () =>
+          await categoriesController.update(categoryMother.dessert.id, {
+            slug: categoryMother.hamburger.slug,
+          })
+      ).rejects.toThrow("Category already exists with this slug");
     });
   });
 });
