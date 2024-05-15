@@ -10,7 +10,7 @@ import { CategoryEntity } from "@modules/categories/core/category.entity";
 export class CategoryRepository implements ICategoryRepository {
   constructor(
     @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
+    private readonly categoryRepository: Repository<Category>
   ) {}
 
   async create(category: CategoryEntity): Promise<CategoryEntity> {
@@ -50,9 +50,10 @@ export class CategoryRepository implements ICategoryRepository {
       where: { id },
     });
 
-    categoryModel.name = category.name;
-    categoryModel.slug = category.slug;
-    categoryModel.description = category.description;
+    categoryModel.name = category.name || categoryModel.name;
+    categoryModel.slug = category.slug || categoryModel.slug;
+    categoryModel.description =
+      category.description || categoryModel.description;
 
     await this.categoryRepository.save(categoryModel);
 
@@ -73,7 +74,7 @@ export class CategoryRepository implements ICategoryRepository {
           product.quantity,
           product.status,
           product.category,
-          product.id,
+          product.id
         );
 
         return newProduct;
@@ -87,7 +88,7 @@ export class CategoryRepository implements ICategoryRepository {
       dataModel.id,
       dataModel.createdAt,
       dataModel.updatedAt,
-      productsEntity,
+      productsEntity
     );
 
     return category;
@@ -97,7 +98,7 @@ export class CategoryRepository implements ICategoryRepository {
     const category = new Category(
       dataEntity.name,
       dataEntity.slug,
-      dataEntity.description,
+      dataEntity.description
     );
 
     return category;

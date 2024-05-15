@@ -15,14 +15,18 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CategoryEntity } from "../core/category.entity";
 import { Category } from "../infra/typeorm/entities/category";
 import { Product } from "@modules/products/infra/typeorm/entities/product";
-import { Repository } from "typeorm";
+import { Repository, UpdateResult } from "typeorm";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { CreateCategoryDto } from "../dtos/create-category.dto";
+import { CategoryProxy } from "./category.prototype";
+import { categoryMother } from "./category.mother";
+import { BadRequestException } from "@nestjs/common/exceptions/bad-request.exception";
+import { CategoriesModule } from "../categories.module";
 
 describe("/categories", () => {
   let categoriesController: CategoriesController;
   let repositoryMock: Repository<Category>;
-
+  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CategoriesController],
@@ -58,30 +62,76 @@ describe("/categories", () => {
     expect(categoriesController).toBeDefined();
   });
 
-  describe("/create", () => {
-    it("should call the repository", async () => {
-
-      const createCategoryDto = {
-        name: "dessert",
-        slug: "dessert",
-        description: "sweets and cakes",
-      }
-
-      const category = {
-        ...createCategoryDto,
-        createdAt: new Date("2019-01-16"),
-        updatedAt: new Date("2019-01-16"),
-        products: undefined,
-        id: undefined
-      }
+  describe("POST", () => {
+    it("should create when don't exists", async () => {
+      const category = categoryMother.dessert;
 
       jest.spyOn(repositoryMock, "save").mockResolvedValueOnce(category);
-      jest.spyOn(repositoryMock, "findOne").mockReturnValueOnce(null)      
+      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(null);
 
-      const response = await categoriesController.create(createCategoryDto as CreateCategoryDto);
+      const response = await categoriesController.create(
+        category.asCreateDTO()
+      );
 
-      expect(response).toEqual(category)
-      expect(response.constructor).toBe(CategoryEntity)     
+      expect(response).toEqual(category);
+    });
+
+    it("should error when exists", async () => {
+      const category = categoryMother.dessert;
+
+      jest.spyOn(repositoryMock, "save").mockResolvedValueOnce(category);
+      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(category);
+
+      expect(
+        async () => await categoriesController.create(category.asCreateDTO())
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe("GET", () => {
+    it("should return all categories", async () => {
+      const categories = [categoryMother.dessert, categoryMother.hamburger];
+
+      jest.spyOn(repositoryMock, "find").mockResolvedValueOnce(categories);
+
+      const response = await categoriesController.findAll();
+
+      expect(response).toEqual(categories);
+    });
+  });
+
+  describe("GET /:slug", () => {
+    it("should return if exists", async () => {
+      const category = categoryMother.dessert;
+      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(category);
+
+      const response = await categoriesController.findOne(category.slug);
+
+      expect(response).toEqual(category);
+    });
+
+    it("should error if not exists", async () => {
+      const category = categoryMother.dessert;
+      jest.spyOn(repositoryMock, "findOne").mockResolvedValueOnce(null);
+
+      expect(
+        async () => await categoriesController.findOne(category.slug)
+      ).rejects.toThrow("Category not found");
+    });
+  });
+
+  describe("POST /:id", () => {
+    it("should update when OK", async () => {
+      const category = categoryMother.dessert;
+      const description = "updated description"
+      const updatedCategory = category.withDescription(description);
+
+      jest.spyOn(repositoryMock, "findOne").mockResolvedValue(category);
+      jest.spyOn(repositoryMock, "save").mockResolvedValue(updatedCategory);
+
+      const response = await categoriesController.update(category.id, {description});
+
+      expect(response).toEqual(updatedCategory)
     });
   });
 });
