@@ -21,35 +21,24 @@ import { CreateCategoryDto } from "../dtos/create-category.dto";
 import { CategoryProxy } from "./category.prototype";
 import { categoryMother } from "./category.mother";
 import { BadRequestException } from "@nestjs/common/exceptions/bad-request.exception";
-import { CategoriesModule } from "../categories.module";
+import {
+  basicCategoriesModuleAttributes,
+  CategoriesModule,
+} from "../categories.module";
 
 describe("/categories", () => {
   let categoriesController: CategoriesController;
   let repositoryMock: Repository<Category>;
-  
+
+  let moduleMetadata = { ...basicCategoriesModuleAttributes };
+  moduleMetadata.providers.push({
+    provide: getRepositoryToken(Category),
+    useClass: Repository,
+  });
+
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [CategoriesController],
-      providers: [
-        {
-          provide: getRepositoryToken(Category),
-          useClass: Repository,
-        },
-        {
-          provide: ICategoryRepository,
-          useClass: CategoryRepository,
-        },
-        {
-          provide: IExceptionService,
-          useClass: ExceptionsService,
-        },
-        CategoryMapper,
-        CreateCategoryUseCase,
-        UpdateCategoryUseCase,
-        FindAllCategoriesUseCase,
-        FindCategoryUseCase,
-      ],
-    }).compile();
+    const module: TestingModule =
+      await Test.createTestingModule(moduleMetadata).compile();
 
     categoriesController =
       module.get<CategoriesController>(CategoriesController);
@@ -123,15 +112,17 @@ describe("/categories", () => {
   describe("POST /:id", () => {
     it("should update when OK", async () => {
       const category = categoryMother.dessert;
-      const description = "updated description"
+      const description = "updated description";
       const updatedCategory = category.withDescription(description);
 
       jest.spyOn(repositoryMock, "findOne").mockResolvedValue(category);
       jest.spyOn(repositoryMock, "save").mockResolvedValue(updatedCategory);
 
-      const response = await categoriesController.update(category.id, {description});
+      const response = await categoriesController.update(category.id, {
+        description,
+      });
 
-      expect(response).toEqual(updatedCategory)
+      expect(response).toEqual(updatedCategory);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, Provider } from "@nestjs/common";
 import { CategoriesController } from "./controller/categories.controller";
 import { ICategoryRepository } from "./core/category-repository.abstract";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -14,8 +14,7 @@ import {
   UpdateCategoryUseCase,
 } from "./use-cases";
 
-@Module({
-  imports: [TypeOrmModule.forFeature([Category])],
+const basicCategoriesModuleMetadata = {
   controllers: [CategoriesController],
   providers: [
     {
@@ -31,6 +30,13 @@ import {
     UpdateCategoryUseCase,
     FindAllCategoriesUseCase,
     FindCategoryUseCase,
-  ],
+  ] as Array<Provider>,
+};
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Category])],
+  ...basicCategoriesModuleMetadata,
 })
-export class CategoriesModule {}
+class CategoriesModule {}
+
+export { basicCategoriesModuleMetadata as basicCategoriesModuleAttributes, CategoriesModule };

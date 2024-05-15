@@ -46,3 +46,6 @@ app-up:
 .PHONY: dk-down ## down all services
 dk-down:
 	@docker compose down --remove-orphans -v
+depedencies-up:
+	@docker compose up -d postgres
+	@docker compose up -d jwt_token_mock
