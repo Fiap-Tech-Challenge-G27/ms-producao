@@ -122,15 +122,12 @@ describe("/categories", () => {
     });
 
     it("should error when dont exists", async () => {
-      const category = categoryMother.dessert;
-      const description = "updated description";
-
       jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValue(null);
 
       expect(
         async () =>
-          await categoriesController.update(category.id, {
-            description,
+          await categoriesController.update(categoryMother.dessert.id, {
+            description: "updated description",
           })
       ).rejects.toThrow("Category not found");
     });

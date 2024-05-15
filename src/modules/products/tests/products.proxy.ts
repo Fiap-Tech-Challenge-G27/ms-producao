@@ -40,7 +40,19 @@ export class ProductProxy extends ProductEntity {
     };
   }
 
+  public withDescription(description: string) {
+    let result = this.clone();
+    result.description = description;
+    return result;
+  }
+
+  public softDeleted() {
+    let result = this.clone()
+    result.deletedAt = Date.now()
+    return result
+  }
+
   public clone() {
-    return Object.assign(Object.create(this), this)
+    return Object.assign(Object.create(this), this);
   }
 }

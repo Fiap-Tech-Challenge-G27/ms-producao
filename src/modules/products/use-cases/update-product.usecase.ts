@@ -19,7 +19,7 @@ export class UpdateProductUseCase implements UseCase {
 
     if (!product) {
       this.exceptionService.notFoundException({
-        message: "Category not found",
+        message: "Product not found",
         code: 404,
       });
     }

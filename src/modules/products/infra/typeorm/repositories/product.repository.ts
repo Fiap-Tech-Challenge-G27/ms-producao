@@ -49,7 +49,7 @@ export class ProductRepository implements IProductRepository {
   }
 
   async remove(id: string) {
-    await this.productRepository.softDelete(id);
+    return await this.productRepository.softDelete(id);
   }
 
   async update(id: string, product: ProductEntity): Promise<ProductEntity> {

@@ -74,15 +74,68 @@ describe("/products", () => {
 
   describe("GET", () => {
     it("should return all categories", async () => {
-        const products = Object.values(productMother)
-        
-        jest.spyOn(productRepositoryMock, "find").mockResolvedValueOnce(products);
-        jest.spyOn(categoryRepositoryMock, "findOne").mockImplementation(({where}) => { return categoryMother[where['id']] });
+      const products = Object.values(productMother);
 
-        const response = await productsController.findAll();
+      jest.spyOn(productRepositoryMock, "find").mockResolvedValueOnce(products);
 
-        expect(response).toEqual(products);
+      const response = await productsController.findAll();
 
+      expect(response).toEqual(products);
+    });
+  });
+
+  describe("PATCH :id", () => {
+    it("should update when OK", async () => {
+      const product = productMother.cake;
+      const description = "updated description";
+      const updatedProduct = product.withDescription(description);
+
+      jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(product);
+      jest
+        .spyOn(categoryRepositoryMock, "findOne")
+        .mockResolvedValue(categoryMother.dessert);
+      jest
+        .spyOn(productRepositoryMock, "save")
+        .mockResolvedValue(updatedProduct);
+
+      const response = await productsController.update(product.id, {
+        description,
       });
-  })
+
+      expect(response).toEqual(updatedProduct);
+    });
+
+    it("should error when dont exists", async () => {
+      jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(null);
+
+      expect(
+        async () =>
+          await productsController.update(productMother.cake.id, {
+            description: "updated description",
+          })
+      ).rejects.toThrow("Product not found");
+    });
+  });
+
+  describe("DELETE :id", () => {
+    it("should soft delete when OK", async () => {
+      const product = productMother.cake;
+      const softDeletedProduct = product.softDeleted();
+      jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(product);
+      jest
+        .spyOn(productRepositoryMock, "softDelete")
+        .mockResolvedValue(softDeletedProduct);
+
+      const response = await productsController.remove(product.id);
+
+      expect(response).toEqual(softDeletedProduct);
+    });
+    it("should error when dont exists", async () => {
+      jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(null);
+
+      expect(
+        async () => await productsController.remove(productMother.cake.id)
+      ).rejects.toThrow("Product not found");
+    });
+  });
 });

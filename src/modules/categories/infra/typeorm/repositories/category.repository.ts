@@ -29,18 +29,16 @@ export class CategoryRepository implements ICategoryRepository {
 
   async findOne(idOrSlug: string, type: "id" | "slug") {
     const queryByType = {
-      id: () => this.categoryRepository.findOne({ where: { id: idOrSlug } }),
-      slug: () =>
-        this.categoryRepository.findOne({ where: { slug: idOrSlug } }),
+      id: { where: { id: idOrSlug } },
+      slug: { where: { slug: idOrSlug } },
     };
 
-    const category = queryByType[type];
-
     try {
-      const result = await category();
+      const result = await this.categoryRepository.findOne(queryByType[type]);
 
       return this.mapModelToEntity(result);
     } catch (error) {
+      console.log(error);
       throw new Error("An error occurred while fetching the category");
     }
   }
