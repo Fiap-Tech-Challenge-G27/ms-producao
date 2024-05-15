@@ -5,10 +5,13 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { Product } from "../infra/typeorm/entities/product";
 import { basicProductsModuleMetadata } from "../products.module";
 import { Category } from "@modules/categories/infra/typeorm/entities/category";
+import { productMother } from "./products.mother";
+import { categoryMother } from "@modules/categories/tests/category.mother";
 
 describe("/products", () => {
   let productsController: ProductsController;
-  let repositoryMock: Repository<Product>;
+  let productRepositoryMock: Repository<Product>;
+  let categoryRepositoryMock: Repository<Category>;
 
   let moduleMetadata = { ...basicProductsModuleMetadata };
   moduleMetadata.providers = [
@@ -28,14 +31,33 @@ describe("/products", () => {
       await Test.createTestingModule(moduleMetadata).compile();
 
     productsController = module.get<ProductsController>(ProductsController);
-    repositoryMock = module.get<Repository<Product>>(
+    productRepositoryMock = module.get<Repository<Product>>(
       getRepositoryToken(Product)
     );
+    categoryRepositoryMock = module.get<Repository<Category>>(
+      getRepositoryToken(Category)
+    );
+  });
+
+  it("should be defined", () => {
+    expect(productsController).toBeDefined();
   });
 
   describe("POST", () => {
     it("should create when don't exists", async () => {
-      console.log("teste");
+      const product = productMother.cake;
+
+      jest.spyOn(productRepositoryMock, "save").mockResolvedValueOnce(product);
+      jest
+        .spyOn(categoryRepositoryMock, "findOne")
+        .mockResolvedValueOnce(categoryMother.dessert);
+      jest
+        .spyOn(productRepositoryMock, "findOne")
+        .mockResolvedValueOnce(product);
+
+      const response = await productsController.create(product.asCreateDTO());
+
+      expect(response).toEqual(product);
     });
   });
 });

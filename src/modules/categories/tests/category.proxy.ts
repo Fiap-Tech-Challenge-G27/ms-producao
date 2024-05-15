@@ -2,6 +2,7 @@ import { randomId, randomEntityDates } from "@shared/tests/random";
 import { v4 as uuidv4 } from "uuid";
 import { CategoryEntity } from "../core/category.entity";
 import { Category } from "../infra/typeorm/entities/category";
+import { CreateCategoryDto } from "../dtos/create-category.dto";
 
 export class CategoryProxy extends CategoryEntity {
   public constructor(name: string, description: string) {
@@ -11,7 +12,7 @@ export class CategoryProxy extends CategoryEntity {
 
     const { createdAt, updatedAt } = randomEntityDates();
     this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.updatedAt = updatedAt;    
 
     this.products = [];
   }
@@ -21,7 +22,7 @@ export class CategoryProxy extends CategoryEntity {
       name: this.name,
       slug: this.slug,
       description: this.description,
-    };
+    } as CreateCategoryDto;
   }
 
   public withDescription(description: string) {

@@ -22,4 +22,12 @@ function randomBoolean(prop = 0.5): boolean {
   return Math.random() < prop;
 }
 
-export {randomId, randomEntityDates}
+function randomInt(min, max) {
+  return Math.round(randomFloat(min, max))
+}
+
+function randomFloat(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+export { randomId, randomEntityDates, randomInt, randomFloat };
