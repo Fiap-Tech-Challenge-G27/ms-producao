@@ -7,6 +7,7 @@ import { basicProductsModuleMetadata } from "../products.module";
 import { Category } from "@modules/categories/infra/typeorm/entities/category";
 import { productMother } from "./products.mother";
 import { categoryMother } from "@modules/categories/tests/category.mother";
+import { BadRequestException } from "@nestjs/common";
 
 describe("/products", () => {
   let productsController: ProductsController;
@@ -44,7 +45,7 @@ describe("/products", () => {
   });
 
   describe("POST", () => {
-    it("should create when don't exists", async () => {
+    it("should create if OK", async () => {
       const product = productMother.cake;
 
       jest.spyOn(productRepositoryMock, "save").mockResolvedValueOnce(product);
@@ -59,5 +60,29 @@ describe("/products", () => {
 
       expect(response).toEqual(product);
     });
+    it("should error if category dont exists", async () => {
+      const product = productMother.cake;
+
+      jest.spyOn(productRepositoryMock, "save").mockResolvedValueOnce(product);
+      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValueOnce(null);
+
+      expect(
+        async () => await productsController.create(product.asCreateDTO())
+      ).rejects.toThrow("Category not found");
+    });
   });
+
+  describe("GET", () => {
+    it("should return all categories", async () => {
+        const products = Object.values(productMother)
+        
+        jest.spyOn(productRepositoryMock, "find").mockResolvedValueOnce(products);
+        jest.spyOn(categoryRepositoryMock, "findOne").mockImplementation(({where}) => { return categoryMother[where['id']] });
+
+        const response = await productsController.findAll();
+
+        expect(response).toEqual(products);
+
+      });
+  })
 });
