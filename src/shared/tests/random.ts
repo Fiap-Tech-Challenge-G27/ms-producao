@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import * as crypto from "crypto";
 
 function randomId(): string {
   return uuidv4();
@@ -17,11 +18,11 @@ function randomEntityDates(
 function randomDate(from: Date, to: Date) {
   const fromTime = from.getTime();
   const toTime = to.getTime();
-  return new Date(fromTime + Math.random() * (toTime - fromTime));
+  return new Date(fromTime + random() * (toTime - fromTime));
 }
 
 function randomBoolean(prop = 0.5): boolean {
-  return Math.random() < prop;
+  return random() < prop;
 }
 
 function randomInt(min, max) {
@@ -29,7 +30,11 @@ function randomInt(min, max) {
 }
 
 function randomFloat(min, max) {
-  return min + Math.random() * (max - min);
+  return min + random() * (max - min);
+}
+
+function random() {
+  return crypto.getRandomValues(new Uint32Array(1))[0]/2**32;
 }
 
 export { randomId, randomEntityDates, randomInt, randomFloat };
