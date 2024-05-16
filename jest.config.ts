@@ -11,7 +11,7 @@ export default async (): Promise<Config.InitialOptions> => {
     testEnvironment: "node",
     verbose: true,
     moduleFileExtensions: ["js", "json", "ts"],
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: "/home/matheus/Documents/pessoal/FIAP/ms-producao/"}),
+    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: __dirname}),
     rootDir: "src",
     testRegex: ".*\\.spec\\.ts$",
     transform: {
