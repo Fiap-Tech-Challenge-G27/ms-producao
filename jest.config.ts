@@ -19,6 +19,10 @@ export default async (): Promise<Config.InitialOptions> => {
     },
     collectCoverageFrom: ["**/*.(t|j)s"],
     coverageDirectory: "../coverage",
+    reporters: ['default',  ['jest-sonar', {
+      outputDirectory: "coverage",
+      outputName: "test-reporter.xml"
+    }]],
     coveragePathIgnorePatterns: [
       "app.module.ts",
       "main.ts"
