@@ -20,6 +20,8 @@ describe("/orders", () => {
   let orderRepositoryMock: Repository<Order>;
   let orderProductsAmountsRepositoryMock: Repository<OrdersProductsAmounts>;
 
+  let req;
+
   let moduleMetadata = { ...basicProductModuleMetadata };
   moduleMetadata.providers = [
     ...moduleMetadata.providers,
@@ -41,7 +43,7 @@ describe("/orders", () => {
     },
     {
       provide: ConfigService,
-      useValue: {get: jest.fn().mockResolvedValue("mock")}
+      useValue: { get: jest.fn().mockResolvedValue("mock") },
     },
     {
       provide: JwtService,
@@ -54,9 +56,9 @@ describe("/orders", () => {
     {
       provide: IPaymentGateway,
       useValue: {
-        create: jest.fn()
-      }
-    }
+        create: jest.fn(),
+      },
+    },
   ];
 
   beforeEach(async () => {
@@ -76,6 +78,10 @@ describe("/orders", () => {
     orderProductsAmountsRepositoryMock = module.get<
       Repository<OrdersProductsAmounts>
     >(getRepositoryToken(OrdersProductsAmounts));
+
+    req = {
+      customer: { data: customerMother.customer },
+    };
   });
 
   it("should be defined", () => {
@@ -85,7 +91,7 @@ describe("/orders", () => {
   describe("POST", () => {
     it("should create when ok", async () => {
       const order = orderMother.sugar_overdose;
-      const createdOrder = order.withId()
+      const createdOrder = order.withId();
 
       jest
         .spyOn(orderRepositoryMock, "save")
@@ -97,9 +103,7 @@ describe("/orders", () => {
           .mockResolvedValueOnce(orderProduct);
       }
 
-      const response = await ordersController.create(order.asCreateDTO(), {
-        customer: { data: customerMother.customer },
-      });
+      const response = await ordersController.create(order.asCreateDTO(), req);
 
       expect(response).toEqual(createdOrder);
     });
