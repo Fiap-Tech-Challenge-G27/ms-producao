@@ -16,7 +16,7 @@ export class RemoveProductUseCase implements UseCase {
 
     if (!product) {
       this.exceptionService.notFoundException({
-        message: "Category not found",
+        message: "Product not found",
         code: 404,
       });
     }

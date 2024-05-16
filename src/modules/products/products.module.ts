@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, Provider } from "@nestjs/common";
 import { ProductsController } from "./controller/products.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Product } from "@products/infra/typeorm/entities/product";
@@ -19,8 +19,7 @@ import {
   UpdateProductUseCase,
 } from "./use-cases";
 
-@Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductImage, Category])],
+const basicProductsModuleMetadata = {
   controllers: [ProductsController],
   providers: [
     {
@@ -41,6 +40,13 @@ import {
     FindAllProductsUseCase,
     RemoveProductUseCase,
     UpdateProductUseCase,
-  ],
+  ] as Array<Provider>,
+}
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Product, ProductImage, Category])],
+  ...basicProductsModuleMetadata
 })
-export class ProductsModule {}
+class ProductsModule {}
+
+export { basicProductsModuleMetadata, ProductsModule };

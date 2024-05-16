@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IExceptionService } from "src/shared/exceptions/exceptions.interface";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
 import { UseCase } from "@shared/core/use-case";
 import { OrderState, PaymentState } from "@orders/core/order.entity";
 import { IOrderRepository } from "../core/order-repository.abstract";
@@ -43,6 +43,7 @@ export class ConfirmatePaymentUseCase implements UseCase {
       fieldsToUpdate["state"] = ORDER_STATUS_MAP.get(paymentStatus);
     }
 
+    console.log(fieldsToUpdate)
     const updatedOrder = { ...orderExists, ...fieldsToUpdate };
 
     const updatedCustomer = await this.orderRepository.update(

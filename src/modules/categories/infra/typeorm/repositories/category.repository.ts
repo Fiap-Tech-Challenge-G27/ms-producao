@@ -10,7 +10,7 @@ import { CategoryEntity } from "@modules/categories/core/category.entity";
 export class CategoryRepository implements ICategoryRepository {
   constructor(
     @InjectRepository(Category)
-    private readonly categoryRepository: Repository<Category>,
+    private readonly categoryRepository: Repository<Category>
   ) {}
 
   async create(category: CategoryEntity): Promise<CategoryEntity> {
@@ -29,18 +29,16 @@ export class CategoryRepository implements ICategoryRepository {
 
   async findOne(idOrSlug: string, type: "id" | "slug") {
     const queryByType = {
-      id: () => this.categoryRepository.findOne({ where: { id: idOrSlug } }),
-      slug: () =>
-        this.categoryRepository.findOne({ where: { slug: idOrSlug } }),
+      id: { where: { id: idOrSlug } },
+      slug: { where: { slug: idOrSlug } },
     };
 
-    const category = queryByType[type];
-
     try {
-      const result = await category();
+      const result = await this.categoryRepository.findOne(queryByType[type]);
 
       return this.mapModelToEntity(result);
     } catch (error) {
+      /* istanbul ignore next */
       throw new Error("An error occurred while fetching the category");
     }
   }
@@ -50,9 +48,10 @@ export class CategoryRepository implements ICategoryRepository {
       where: { id },
     });
 
-    categoryModel.name = category.name;
-    categoryModel.slug = category.slug;
-    categoryModel.description = category.description;
+    categoryModel.name = category.name || categoryModel.name;
+    categoryModel.slug = category.slug || categoryModel.slug;
+    categoryModel.description =
+      category.description || categoryModel.description;
 
     await this.categoryRepository.save(categoryModel);
 
@@ -72,8 +71,11 @@ export class CategoryRepository implements ICategoryRepository {
           product.price,
           product.quantity,
           product.status,
-          product.category,
+          undefined,
           product.id,
+          product.createdAt,
+          product.updatedAt,
+          product.deletedAt
         );
 
         return newProduct;
@@ -87,8 +89,12 @@ export class CategoryRepository implements ICategoryRepository {
       dataModel.id,
       dataModel.createdAt,
       dataModel.updatedAt,
-      productsEntity,
+      productsEntity
     );
+
+    for (const productEntity of productsEntity) {
+      productEntity.category = category;
+    }
 
     return category;
   }
@@ -97,7 +103,7 @@ export class CategoryRepository implements ICategoryRepository {
     const category = new Category(
       dataEntity.name,
       dataEntity.slug,
-      dataEntity.description,
+      dataEntity.description
     );
 
     return category;

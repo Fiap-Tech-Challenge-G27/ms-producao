@@ -12,9 +12,9 @@ import {
 } from "@nestjs/common";
 import { AuthGuard } from "@modules/auth/auth.guard";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { CreateOrderDto } from "src/modules/orders/dtos/create-order.dto";
+import { CreateOrderDto } from "@orders/dtos/create-order.dto";
 import { FindOrderUseCase } from "../use-cases/find-order.usecase";
-import { UpdateOrderDto } from "../dtos/update-customer.dto";
+import { UpdateOrderDto } from "../dtos/update-order.dto";
 import { PaymentConfirmationDto } from "../dtos/payment-confirmation.dto";
 import { UpdateOrderUseCase } from "../use-cases/update-order.usecase";
 import { ConfirmatePaymentUseCase } from "../use-cases/confimate-payment.usecase";
@@ -27,21 +27,24 @@ export class OrdersController {
     private readonly findAllOrdersUseCase: FindAllOrdersUseCase,
     private readonly findOrderUseCase: FindOrderUseCase,
     private readonly confirmatePaymentUseCase: ConfirmatePaymentUseCase,
-    private readonly updateOrderUseCase: UpdateOrderUseCase, //private readonly updateOrderPaymentStateUseCase: UpdateOrderPaymentStateUseCase,
+    private readonly updateOrderUseCase: UpdateOrderUseCase //private readonly updateOrderPaymentStateUseCase: UpdateOrderPaymentStateUseCase,
   ) {}
 
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  create(@Body() createOrdersDto: CreateOrderDto, @Request() req) {
-    return this.createOrderUseCase.execute(createOrdersDto, req.customer.data);
+  async create(@Body() createOrdersDto: CreateOrderDto, @Request() req) {
+    return await this.createOrderUseCase.execute(
+      createOrdersDto,
+      req.customer.data.id
+    );
   }
 
   @Get()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   findAll(@Request() req) {
-    return this.findAllOrdersUseCase.execute(req.customer.data);
+    return this.findAllOrdersUseCase.execute(req.customer.data.id);
   }
 
   @Get(":id")
@@ -52,14 +55,14 @@ export class OrdersController {
   @Patch("/:id/state")
   updateOrderStatus(
     @Param("id") orderId: string,
-    @Body() statusDto: UpdateOrderDto,
+    @Body() statusDto: UpdateOrderDto
   ) {
     return this.updateOrderUseCase.execute(orderId, statusDto);
   }
 
   @Post("/webhooks/payment-confirmation")
   receivePaymentConfirmation(
-    @Body() payment_confirmation: PaymentConfirmationDto,
+    @Body() payment_confirmation: PaymentConfirmationDto
   ): Promise<void> {
     const orderId = payment_confirmation["identifier"]["orderId"];
     const status = payment_confirmation["status"];

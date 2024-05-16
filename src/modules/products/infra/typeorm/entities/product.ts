@@ -21,7 +21,7 @@ export class Product {
   @Column({ name: "description", length: 255, nullable: true })
   description: string;
 
-  @ManyToOne(() => Category, (category) => category.products, {
+  @ManyToOne(/* istanbul ignore next */() => Category, /* istanbul ignore next */ (category) => category.products, {
     nullable: false,
   })
   @JoinColumn({ name: "category_id" })

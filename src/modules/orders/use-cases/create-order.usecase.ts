@@ -1,6 +1,5 @@
-import { FindCustomerUseCase } from "@customers/use-cases";
 import { Inject, Injectable } from "@nestjs/common";
-import { IExceptionService } from "src/shared/exceptions/exceptions.interface";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
 import { UseCase } from "@shared/core/use-case";
 import { CreateOrderDto, OrderProducts } from "../dtos/create-order.dto";
 import { OrderMapper } from "../core/mappers/order.mapper";
@@ -9,12 +8,10 @@ import { OrderProductEntity } from "../core/order.entity";
 import { IProductRepository } from "@products/core/product-repository.abstract";
 import { IOrderRepository } from "../core/order-repository.abstract";
 import { IPaymentGateway } from "../core/payment-gateway";
-import { CustomerEntity } from "@modules/customers/core/customer.entity";
 
 @Injectable()
 export class CreateOrderUseCase implements UseCase {
   constructor(
-    private readonly findCustomerUseCase: FindCustomerUseCase,
     @Inject(IExceptionService)
     private readonly exceptionService: IExceptionService,
     @Inject(IPaymentGateway)
@@ -40,7 +37,7 @@ export class CreateOrderUseCase implements UseCase {
     return await Promise.all(orderProdutsEntity);
   }
 
-  async execute(createOrderDto: CreateOrderDto, customer: CustomerEntity) {
+  async execute(createOrderDto: CreateOrderDto, customerId: string) {
     const { orderProducts } = createOrderDto;
 
     if (!orderProducts.length) {
@@ -53,13 +50,13 @@ export class CreateOrderUseCase implements UseCase {
     const orderProductsEntity = await this.getOrderProducts(orderProducts);
 
     const order = this.orderMapper.mapFrom({
-      customer,
+      customerId,
       orderProductsEntity,
     });
 
     const result = await this.orderRepository.create(order);
     await this.paymentGateway.create(result.id);
-
+    
     return result;
   }
 }

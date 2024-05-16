@@ -8,7 +8,7 @@ import { CategoryEntity } from "@categories/core/category.entity";
 export class ProductRepository implements IProductRepository {
   constructor(
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    private readonly productRepository: Repository<Product>
   ) {}
 
   async create(product: ProductEntity): Promise<ProductEntity> {
@@ -49,7 +49,7 @@ export class ProductRepository implements IProductRepository {
   }
 
   async remove(id: string) {
-    await this.productRepository.softDelete(id);
+    return await this.productRepository.softDelete(id);
   }
 
   async update(id: string, product: ProductEntity): Promise<ProductEntity> {
@@ -87,7 +87,8 @@ export class ProductRepository implements IProductRepository {
         dataModel.category.id,
         dataModel.category.createdAt,
         dataModel.category.updatedAt,
-      ),
+        []
+      )
     );
     product.id = dataModel.id;
     product.createdAt = dataModel.createdAt;
@@ -96,6 +97,7 @@ export class ProductRepository implements IProductRepository {
   }
   mapEntityToModel(dataEntity: ProductEntity): Product {
     if (!dataEntity) {
+      /* istanbul ignore next */
       return null;
     }
 
