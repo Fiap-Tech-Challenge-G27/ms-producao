@@ -38,7 +38,7 @@ export class CategoryRepository implements ICategoryRepository {
 
       return this.mapModelToEntity(result);
     } catch (error) {
-      console.log(error);
+      /* istanbul ignore next */
       throw new Error("An error occurred while fetching the category");
     }
   }

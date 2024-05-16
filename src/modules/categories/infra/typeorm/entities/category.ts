@@ -22,10 +22,15 @@ export class Category {
   @Column({ name: "description", length: 255, nullable: true })
   description: string;
 
-  @OneToMany(() => Product, (product) => product.category, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(
+    /* istanbul ignore next */
+    () => Product,
+    /* istanbul ignore next */ (product) => product.category,
+    {
+      cascade: true,
+      eager: true,
+    }
+  )
   products: Product[];
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })

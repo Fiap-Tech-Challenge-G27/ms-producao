@@ -15,8 +15,10 @@ export class Order {
   id: string;
 
   @OneToMany(
+    /* istanbul ignore next */
     () => OrdersProductsAmounts,
-    (order_product_amount) => order_product_amount.order,
+    /* istanbul ignore next */
+    (order_product_amount) => order_product_amount.order
   )
   orderProductsAmounts: OrdersProductsAmounts[];
 

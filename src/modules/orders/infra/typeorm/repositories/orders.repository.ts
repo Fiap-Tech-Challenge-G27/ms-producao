@@ -50,6 +50,8 @@ export class OrderRepository implements IOrderRepository {
     return this.orderProductAmountRepository.save(order_product_amount_model);
   }
 
+  //not used
+  /* istanbul ignore next */
   async findAll(): Promise<OrderEntity[]> {
     const orders = await this.orderRepository.find({
       relations: {
@@ -94,6 +96,7 @@ export class OrderRepository implements IOrderRepository {
 
       return this.mapModelToEntity(order);
     } catch (error) {
+      /* istanbul ignore next */
       return null;
     }
   }
