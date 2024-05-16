@@ -14,7 +14,7 @@ export class OrderRepository implements IOrderRepository {
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
     @InjectRepository(OrdersProductsAmounts)
-    private readonly orderProductAmountRepository: Repository<OrdersProductsAmounts>,
+    private readonly orderProductAmountRepository: Repository<OrdersProductsAmounts>
   ) {}
 
   async create(order: OrderEntity): Promise<OrderEntity> {
@@ -22,14 +22,14 @@ export class OrderRepository implements IOrderRepository {
 
     const orderCreated = await this.orderRepository.save(orderModel);
 
-    orderCreated.orders_products_amounts = await Promise.all(
-      order.orderProducts.map(async (orderProduct) => {
+    orderCreated.orderProductsAmounts = await Promise.all(
+      order.orderProductsAmounts.map(async (orderProduct) => {
         return await this._saveOrderProductAmountModel(
           orderCreated,
           orderProduct.product,
-          orderProduct.amount,
+          orderProduct.amount
         );
-      }),
+      })
     );
 
     return this.mapModelToEntity(orderCreated);
@@ -38,7 +38,7 @@ export class OrderRepository implements IOrderRepository {
   private async _saveOrderProductAmountModel(
     orderModel: Order,
     product: ProductEntity,
-    amount: number,
+    amount: number
   ) {
     const order_product_amount_model: OrdersProductsAmounts =
       new OrdersProductsAmounts();
@@ -53,7 +53,7 @@ export class OrderRepository implements IOrderRepository {
   async findAll(): Promise<OrderEntity[]> {
     const orders = await this.orderRepository.find({
       relations: {
-        orders_products_amounts: {
+        orderProductsAmounts: {
           product: {
             category: true,
           },
@@ -68,7 +68,7 @@ export class OrderRepository implements IOrderRepository {
     const orders = await this.orderRepository.find({
       where: { customerId: customerId },
       relations: {
-        orders_products_amounts: {
+        orderProductsAmounts: {
           product: {
             category: true,
           },
@@ -84,7 +84,7 @@ export class OrderRepository implements IOrderRepository {
       const order = await this.orderRepository.findOne({
         where: { id },
         relations: {
-          orders_products_amounts: {
+          orderProductsAmounts: {
             product: {
               category: true,
             },
@@ -106,7 +106,7 @@ export class OrderRepository implements IOrderRepository {
     if (!orderModel) return null;
     const order = new OrderEntity(
       orderModel.customerId,
-      orderModel.orders_products_amounts.map(function (item) {
+      orderModel.orderProductsAmounts.map(function (item) {
         const productItem = item.product;
         const categoryItem = item.product.category;
         const product = new ProductEntity(
@@ -120,13 +120,20 @@ export class OrderRepository implements IOrderRepository {
             categoryItem.name,
             categoryItem.slug,
             categoryItem.description,
+            categoryItem.id,
+            categoryItem.createdAt,
+            categoryItem.updatedAt,
+            []
           ),
           productItem.id,
+          productItem.createdAt,
+          productItem.updatedAt,
+          productItem.deletedAt
         );
         return new OrderProductEntity(product, item.amount);
       }),
       orderModel.state,
-      orderModel.paymentState,
+      orderModel.paymentState
     );
 
     order.id = orderModel.id;

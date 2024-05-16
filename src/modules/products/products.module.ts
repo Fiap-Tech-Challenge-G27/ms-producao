@@ -40,7 +40,7 @@ const basicProductsModuleMetadata = {
     FindAllProductsUseCase,
     RemoveProductUseCase,
     UpdateProductUseCase,
-  ]  as Array<Provider>,
+  ] as Array<Provider>,
 }
 
 @Module({

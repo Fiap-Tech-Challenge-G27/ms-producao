@@ -18,7 +18,7 @@ export class Order {
     () => OrdersProductsAmounts,
     (order_product_amount) => order_product_amount.order,
   )
-  orders_products_amounts: OrdersProductsAmounts[];
+  orderProductsAmounts: OrdersProductsAmounts[];
 
   @Column({
     type: "enum",

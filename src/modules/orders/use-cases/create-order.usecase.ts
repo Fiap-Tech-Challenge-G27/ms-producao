@@ -56,7 +56,7 @@ export class CreateOrderUseCase implements UseCase {
 
     const result = await this.orderRepository.create(order);
     await this.paymentGateway.create(result.id);
-
+    
     return result;
   }
 }

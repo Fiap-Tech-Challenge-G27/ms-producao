@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, Provider } from "@nestjs/common";
 import { OrdersController } from "./controller/orders.controller";
 import { IOrderRepository } from "./core/order-repository.abstract";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -22,16 +22,7 @@ import { IPaymentGateway } from "./core/payment-gateway";
 import { PaymentGateway } from "./infra/typeorm/thirdParties/payment-gateway";
 import { JwtModule } from "@nestjs/jwt";
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Order,
-      OrdersProductsAmounts,
-      Category,
-      Product,
-    ]),
-    JwtModule,
-  ],
+const basicProductModuleMetadata = {
   controllers: [OrdersController],
   providers: [
     {
@@ -57,6 +48,16 @@ import { JwtModule } from "@nestjs/jwt";
     FindOrderUseCase,
     UpdateOrderUseCase,
     ConfirmatePaymentUseCase,
+  ] as Array<Provider>,
+};
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([Order, OrdersProductsAmounts, Category, Product]),
+    JwtModule,
   ],
+  ...basicProductModuleMetadata,
 })
-export class OrdersModule {}
+class OrdersModule {}
+
+export {basicProductModuleMetadata, OrdersModule}
