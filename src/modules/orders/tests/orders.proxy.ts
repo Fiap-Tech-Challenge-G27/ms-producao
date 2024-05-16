@@ -10,17 +10,16 @@ import { CreateOrderDto, OrderProducts } from "../dtos/create-order.dto";
 import { randomEntityDates, randomId } from "@shared/tests/random";
 
 export class OrderProxy extends OrderEntity {
-  public constructor(orderProduct: Array<[ProductEntity, number]>, state: OrderState, paymentState: PaymentState) {
+  public constructor(
+    orderProduct: Array<[ProductEntity, number]>,
+    state: OrderState,
+    paymentState: PaymentState
+  ) {
     let orderProducts = orderProduct.map(
       ([project, number]) => new OrderProductEntity(project, number)
     );
 
-    super(
-      customerMother.customer.id,
-      orderProducts,
-      state,
-      paymentState
-    );
+    super(customerMother.customer.id, orderProducts, state, paymentState);
 
     for (let orderProductAmount of this.orderProductsAmounts) {
       orderProductAmount.order = this;
@@ -43,7 +42,7 @@ export class OrderProxy extends OrderEntity {
     } as CreateOrderDto;
   }
 
-  public withId() {
+  public withRandomId() {
     let result = this.clone();
     result.id = randomId();
     return result;
@@ -55,13 +54,24 @@ export class OrderProxy extends OrderEntity {
     return result;
   }
 
+  public withState(state: OrderState) {
+    let result = this.clone();
+    result.state = state;
+    return result;
+  }
+
   public clone(): OrderProxy {
     const result: OrderProxy = Object.assign(Object.create(this), this);
 
     result.orderProductsAmounts = result.orderProductsAmounts.map(
-      (orderProductEntity) => new OrderProductEntity(orderProductEntity.product, orderProductEntity.amount, result)
+      (orderProductEntity) =>
+        new OrderProductEntity(
+          orderProductEntity.product,
+          orderProductEntity.amount,
+          result
+        )
     );
 
-    return result
+    return result;
   }
 }

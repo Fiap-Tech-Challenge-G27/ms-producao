@@ -12,6 +12,7 @@ import { JwtService } from "@nestjs/jwt";
 import { customerMother } from "./customerId.mother";
 import { orderMother } from "./order.mother";
 import { IPaymentGateway } from "../core/payment-gateway";
+import { OrderState } from "../core/order.entity";
 
 describe("/orders", () => {
   let ordersController: OrdersController;
@@ -91,7 +92,7 @@ describe("/orders", () => {
   describe("POST", () => {
     it("should create when ok", async () => {
       const order = orderMother.sugar_overdose;
-      const createdOrder = order.withId();
+      const createdOrder = order.withRandomId();
 
       jest
         .spyOn(orderRepositoryMock, "save")
@@ -121,7 +122,7 @@ describe("/orders", () => {
     });
   });
 
-  describe("/GET", () => {
+  describe("GET", () => {
     it("should return all orders", async () => {
       const orders = Object.values(orderMother);
 
@@ -136,7 +137,7 @@ describe("/orders", () => {
     });
   });
 
-  describe("/GET :id", () => {
+  describe("GET /:id", () => {
     it("should return when exists", async () => {
       const order = orderMother.sugar_overdose;
 
@@ -153,6 +154,25 @@ describe("/orders", () => {
         async () =>
           await ordersController.findOne(orderMother.sugar_overdose.id)
       ).rejects.toThrow("Order not found");
+    });
+  });
+
+  describe("PATCH /:id/state", () => {
+    it("should update when ok", async () => {
+      const order = orderMother.sugar_overdose;
+      const state = OrderState.InPreparation;
+      const updatedOrder = order.withState(state);
+
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+      jest
+        .spyOn(orderRepositoryMock, "save")
+        .mockResolvedValueOnce(updatedOrder);
+
+      const response = await ordersController.updateOrderStatus(order.id, {
+        state,
+      });
+      
+      expect(response).toEqual(updatedOrder)
     });
   });
 });
