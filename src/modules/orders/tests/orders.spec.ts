@@ -146,5 +146,13 @@ describe("/orders", () => {
 
       expect(response).toEqual(order);
     });
+    it("should error when don't exists", async () => {
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
+
+      expect(
+        async () =>
+          await ordersController.findOne(orderMother.sugar_overdose.id)
+      ).rejects.toThrow("Order not found");
+    });
   });
 });
