@@ -17,8 +17,7 @@ jobs:
         fetch-depth: 0
     - name: Run coverage
       run: docker build --target=coverage --tag=test:latest --build-arg CURRENT_DIR=$(pwd) . && \
-            container_id=$(docker create test:latest) && \
-            docker cp $container_id:/app/coverage .
+            docker cp $(docker create test:latest):/app/coverage .
             
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
