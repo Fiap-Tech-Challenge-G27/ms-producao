@@ -73,7 +73,7 @@ describe("/products", () => {
   });
 
   describe("GET", () => {
-    it("should return all categories", async () => {
+    it("should return all products", async () => {
       const products = Object.values(productMother);
 
       jest.spyOn(productRepositoryMock, "find").mockResolvedValueOnce(products);

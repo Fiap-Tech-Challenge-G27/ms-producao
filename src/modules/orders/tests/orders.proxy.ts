@@ -10,7 +10,7 @@ import { CreateOrderDto, OrderProducts } from "../dtos/create-order.dto";
 import { randomEntityDates, randomId } from "@shared/tests/random";
 
 export class OrderProxy extends OrderEntity {
-  public constructor(orderProduct: Array<[ProductEntity, number]>) {
+  public constructor(orderProduct: Array<[ProductEntity, number]>, state: OrderState, paymentState: PaymentState) {
     let orderProducts = orderProduct.map(
       ([project, number]) => new OrderProductEntity(project, number)
     );
@@ -18,8 +18,8 @@ export class OrderProxy extends OrderEntity {
     super(
       customerMother.customer.id,
       orderProducts,
-      OrderState.Received,
-      PaymentState.Pending
+      state,
+      paymentState
     );
 
     for (let orderProductAmount of this.orderProductsAmounts) {

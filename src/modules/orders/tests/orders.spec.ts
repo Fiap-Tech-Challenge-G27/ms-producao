@@ -120,4 +120,17 @@ describe("/orders", () => {
       ).rejects.toThrow("Order products is empty");
     });
   });
+
+  describe("/GET", () => {
+    it("should return all orders", async () => {
+      const orders = Object.values(orderMother);
+
+      jest.spyOn(orderRepositoryMock, "find").mockResolvedValueOnce(orders);
+
+      const response = await ordersController.findAll(req);
+
+      expect(response).toEqual([orderMother.dinner, orderMother.sugar_overdose]);
+    });
+  });
+
 });
