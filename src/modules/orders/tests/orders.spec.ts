@@ -131,6 +131,7 @@ describe("/orders", () => {
       const response = await ordersController.findAll(req);
 
       expect(response).toEqual([
+        orderMother.lunch,
         orderMother.dinner,
         orderMother.sugar_overdose,
       ]);
@@ -161,7 +162,8 @@ describe("/orders", () => {
     it("should update when ok", async () => {
       const order = orderMother.sugar_overdose;
       const state = OrderState.InPreparation;
-      const updatedOrder = order.withState(state);
+      const paymentState = PaymentState.Approved;
+      const updatedOrder = order.withState(state).withPaymentState(paymentState);
 
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
       jest
@@ -169,7 +171,7 @@ describe("/orders", () => {
         .mockResolvedValueOnce(updatedOrder);
 
       const response = await ordersController.updateOrderStatus(order.id, {
-        state,
+        state, paymentState
       });
 
       expect(response).toEqual(updatedOrder);

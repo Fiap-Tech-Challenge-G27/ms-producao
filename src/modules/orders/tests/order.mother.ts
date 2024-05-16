@@ -9,7 +9,8 @@ export const orderMother = {
       [productMother.pudding, 20],
     ],
     OrderState.Received,
-    PaymentState.Pending
+    PaymentState.Pending,
+    new Date("2023-01-01")
   ),
   dinner: new OrderProxy(
     [
@@ -17,7 +18,17 @@ export const orderMother = {
       [productMother.whopper, 1],
     ],
     OrderState.InPreparation,
-    PaymentState.Approved
+    PaymentState.Approved,
+    new Date("2022-01-01")
+  ),
+  lunch: new OrderProxy(
+    [
+      [productMother.bigMac, 2],
+      [productMother.whopper, 1],
+    ],
+    OrderState.InPreparation,
+    PaymentState.Approved,
+    new Date("2021-01-01")
   ),
   finished: new OrderProxy(
     [
@@ -27,6 +38,7 @@ export const orderMother = {
       [productMother.pudding, 1]
     ],
     OrderState.Finished,
-    PaymentState.Approved
+    PaymentState.Approved,
+    new Date("2020-01-01")
   )
 };

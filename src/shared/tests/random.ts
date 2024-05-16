@@ -4,9 +4,11 @@ function randomId(): string {
   return uuidv4();
 }
 
-function randomEntityDates() {
-  const endDate = new Date("2025-01-01");
-  const createdAt = randomDate(new Date("2020-01-01"), endDate);
+function randomEntityDates(
+  startDate = new Date("2020-01-01"),
+  endDate = new Date("2025-01-01")
+) {
+  const createdAt = randomDate(startDate, endDate);
   const updatedAt = randomBoolean() ? randomDate(createdAt, endDate) : null;
 
   return { createdAt, updatedAt };
@@ -23,7 +25,7 @@ function randomBoolean(prop = 0.5): boolean {
 }
 
 function randomInt(min, max) {
-  return Math.round(randomFloat(min, max))
+  return Math.round(randomFloat(min, max));
 }
 
 function randomFloat(min, max) {

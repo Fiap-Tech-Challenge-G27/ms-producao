@@ -13,7 +13,9 @@ export class OrderProxy extends OrderEntity {
   public constructor(
     orderProduct: Array<[ProductEntity, number]>,
     state: OrderState,
-    paymentState: PaymentState
+    paymentState: PaymentState,
+    createdAt: Date = undefined,
+    updatedAt: Date = undefined
   ) {
     let orderProducts = orderProduct.map(
       ([project, number]) => new OrderProductEntity(project, number)
@@ -25,9 +27,9 @@ export class OrderProxy extends OrderEntity {
       orderProductAmount.order = this;
     }
 
-    const { createdAt, updatedAt } = randomEntityDates();
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    const defaultDates = randomEntityDates(createdAt);
+    this.createdAt = createdAt || defaultDates.createdAt;
+    this.updatedAt = updatedAt || defaultDates.updatedAt;
   }
 
   public asCreateDTO() {
@@ -57,6 +59,11 @@ export class OrderProxy extends OrderEntity {
   public withState(state: OrderState) {
     let result = this.clone();
     result.state = state;
+    return result;
+  }
+  public withPaymentState(paymentState: PaymentState) {
+    let result = this.clone();
+    result.paymentState = paymentState;
     return result;
   }
 
