@@ -43,7 +43,6 @@ export class ConfirmatePaymentUseCase implements UseCase {
       fieldsToUpdate["state"] = ORDER_STATUS_MAP.get(paymentStatus);
     }
 
-    console.log(fieldsToUpdate)
     const updatedOrder = { ...orderExists, ...fieldsToUpdate };
 
     const updatedCustomer = await this.orderRepository.update(
