@@ -129,8 +129,22 @@ describe("/orders", () => {
 
       const response = await ordersController.findAll(req);
 
-      expect(response).toEqual([orderMother.dinner, orderMother.sugar_overdose]);
+      expect(response).toEqual([
+        orderMother.dinner,
+        orderMother.sugar_overdose,
+      ]);
     });
   });
 
+  describe("/GET :id", () => {
+    it("should return when exists", async () => {
+      const order = orderMother.sugar_overdose;
+
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+
+      const response = await ordersController.findOne(order.id);
+
+      expect(response).toEqual(order);
+    });
+  });
 });
