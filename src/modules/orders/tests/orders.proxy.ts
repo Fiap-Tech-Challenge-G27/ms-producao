@@ -51,7 +51,7 @@ export class OrderProxy extends OrderEntity {
 
   public withoutOrderProductsAmounts() {
     let result = this.clone();
-    result.orderProductsAmounts = undefined;
+    result.orderProductsAmounts = [];
     return result;
   }
 

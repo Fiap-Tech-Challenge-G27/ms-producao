@@ -107,5 +107,17 @@ describe("/orders", () => {
 
       expect(response).toEqual(createdOrder);
     });
+
+    it("should error when empty", async () => {
+      expect(
+        async () =>
+          await ordersController.create(
+            orderMother.sugar_overdose
+              .withoutOrderProductsAmounts()
+              .asCreateDTO(),
+            req
+          )
+      ).rejects.toThrow("Order products is empty");
+    });
   });
 });
