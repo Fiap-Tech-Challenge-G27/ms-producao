@@ -15,6 +15,11 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
+    - name: Run coverage
+      run: docker build --target=coverage --tag=test:latest --build-arg CURRENT_DIR=$(pwd) . && \
+            container_id=$(docker create test:latest) && \
+            docker cp $container_id:/app/coverage .
+            
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
