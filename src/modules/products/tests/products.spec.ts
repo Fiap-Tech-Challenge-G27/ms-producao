@@ -121,14 +121,19 @@ describe("/products", () => {
     it("should soft delete when OK", async () => {
       const product = productMother.cake;
       const softDeletedProduct = product.softDeleted();
+
+      const updatedResult = {
+        raw: '',
+        generatedMaps: [softDeletedProduct]
+      }
       jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(product);
       jest
         .spyOn(productRepositoryMock, "softDelete")
-        .mockResolvedValue(softDeletedProduct);
+        .mockResolvedValue(updatedResult);
 
       const response = await productsController.remove(product.id);
 
-      expect(response).toEqual(softDeletedProduct);
+      expect(response).toEqual(updatedResult);
     });
     it("should error when dont exists", async () => {
       jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(null);
