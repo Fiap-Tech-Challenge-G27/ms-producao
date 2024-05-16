@@ -15,17 +15,17 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: Install docker
-        run: |
-          apt-get update && apt-get install --no-install-recommends -y ca-certificates curl gnupg lsb-release sudo
-          curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          apt-get update && apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io
-      - name: Run coverage
-        run:
-          apt-get update && apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io
-          docker build --target=coverage --tag=test:latest --build-arg CURRENT_DIR=$(pwd) . && \
-          docker cp $(docker create test:latest):/app/coverage .
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+      - run: npm ci
+      - run: npm run coverage
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
