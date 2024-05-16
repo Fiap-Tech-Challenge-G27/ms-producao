@@ -6,6 +6,7 @@ import { basicCategoriesModuleMetadata } from "../categories.module";
 import { CategoriesController } from "../controller/categories.controller";
 import { Category } from "../infra/typeorm/entities/category";
 import { categoryMother } from "./category.mother";
+import { productMother } from "@modules/products/tests/products.mother";
 
 describe("/categories", () => {
   let categoriesController: CategoriesController;
@@ -37,7 +38,7 @@ describe("/categories", () => {
 
   describe("POST", () => {
     it("should create when don't exists", async () => {
-      const category = categoryMother.dessert;
+      const category = categoryMother.dessert.withProducts(productMother);
 
       jest
         .spyOn(categoryRepositoryMock, "save")
@@ -69,7 +70,7 @@ describe("/categories", () => {
 
   describe("GET", () => {
     it("should return all categories", async () => {
-      const categories = [categoryMother.dessert, categoryMother.hamburger];
+      const categories = [categoryMother.dessert.withProducts(productMother), categoryMother.hamburger.withProducts(productMother)];
 
       jest
         .spyOn(categoryRepositoryMock, "find")
@@ -83,7 +84,7 @@ describe("/categories", () => {
 
   describe("GET /:slug", () => {
     it("should return if exists", async () => {
-      const category = categoryMother.dessert;
+      const category = categoryMother.dessert.withProducts(productMother);
       jest
         .spyOn(categoryRepositoryMock, "findOne")
         .mockResolvedValueOnce(category);
@@ -94,7 +95,7 @@ describe("/categories", () => {
     });
 
     it("should error if not exists", async () => {
-      const category = categoryMother.dessert;
+      const category = categoryMother.dessert.withProducts(productMother);
       jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValueOnce(null);
 
       expect(
@@ -105,7 +106,7 @@ describe("/categories", () => {
 
   describe("POST /:id", () => {
     it("should update when OK", async () => {
-      const category = categoryMother.dessert;
+      const category = categoryMother.dessert.withProducts(productMother);
       const description = "updated description";
       const updatedCategory = category.withDescription(description);
 

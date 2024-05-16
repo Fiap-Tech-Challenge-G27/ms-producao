@@ -47,12 +47,18 @@ export class ProductProxy extends ProductEntity {
   }
 
   public softDeleted() {
-    let result = this.clone()
-    result.deletedAt = Date.now()
-    return result
+    let result = this.clone();
+    result.deletedAt = new Date(Date.now());
+    return result;
   }
 
-  public clone() {
-    return Object.assign(Object.create(this), this);
+  public clone(category: CategoryEntity = undefined) {
+    const result: ProductProxy = Object.assign(Object.create(this), this);
+
+    if (category) {
+      result.category = category;
+    }
+
+    return result;
   }
 }

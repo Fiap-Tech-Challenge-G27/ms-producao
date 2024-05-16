@@ -71,8 +71,11 @@ export class CategoryRepository implements ICategoryRepository {
           product.price,
           product.quantity,
           product.status,
-          product.category,
-          product.id
+          undefined,
+          product.id,
+          product.createdAt,
+          product.updatedAt,
+          product.deletedAt
         );
 
         return newProduct;
@@ -88,6 +91,10 @@ export class CategoryRepository implements ICategoryRepository {
       dataModel.updatedAt,
       productsEntity
     );
+
+    for (const productEntity of productsEntity) {
+      productEntity.category = category;
+    }
 
     return category;
   }
