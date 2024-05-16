@@ -12,7 +12,7 @@ import { JwtService } from "@nestjs/jwt";
 import { customerMother } from "./customerId.mother";
 import { orderMother } from "./order.mother";
 import { IPaymentGateway } from "../core/payment-gateway";
-import { OrderState } from "../core/order.entity";
+import { OrderState, PaymentState } from "../core/order.entity";
 
 describe("/orders", () => {
   let ordersController: OrdersController;
@@ -171,8 +171,80 @@ describe("/orders", () => {
       const response = await ordersController.updateOrderStatus(order.id, {
         state,
       });
-      
-      expect(response).toEqual(updatedOrder)
+
+      expect(response).toEqual(updatedOrder);
+    });
+
+    it("should error when dont exists", async () => {
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
+
+      expect(
+        async () =>
+          await ordersController.updateOrderStatus(
+            orderMother.sugar_overdose.id,
+            {
+              state: OrderState.InPreparation,
+            }
+          )
+      ).rejects.toThrow("Order not found");
+    });
+  });
+
+  describe("POST /webhooks/payment-confirmation", () => {
+    it("should update to InPreparation when approved", async () => {
+      const order = orderMother.sugar_overdose;
+
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+      const saveMock = jest
+        .spyOn(orderRepositoryMock, "save")
+        .mockResolvedValueOnce(order);
+
+      const response = await ordersController.receivePaymentConfirmation({
+        identifier: { order_id: order.id },
+        status: "approved",
+      });
+
+      const call = saveMock.mock.calls[0][0];
+
+      expect(Object.keys(call)).toContain("state");
+      expect(call["state"]).toBe(OrderState.InPreparation);
+
+      expect(Object.keys(call)).toContain("paymentState");
+      expect(call["paymentState"]).toBe(PaymentState.Approved);
+    });
+
+    it("should update to Finish when canceled", async () => {
+      const order = orderMother.sugar_overdose;
+
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+      const saveMock = jest
+        .spyOn(orderRepositoryMock, "save")
+        .mockResolvedValueOnce(order);
+
+      await ordersController.receivePaymentConfirmation({
+        identifier: { order_id: order.id },
+        status: "canceled",
+      });
+
+      const call = saveMock.mock.calls[0][0];
+
+      expect(Object.keys(call)).toContain("state");
+      expect(call["state"]).toBe(OrderState.Finished);
+
+      expect(Object.keys(call)).toContain("paymentState");
+      expect(call["paymentState"]).toBe(PaymentState.Canceled);
+    });
+
+    it("should error when dont exists", async () => {
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
+
+      expect(
+        async () =>
+          await ordersController.receivePaymentConfirmation({
+            identifier: { order_id: orderMother.sugar_overdose.id },
+            status: "canceled",
+          })
+      ).rejects.toThrow("Order not found");
     });
   });
 });

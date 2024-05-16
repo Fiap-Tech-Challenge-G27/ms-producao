@@ -60,6 +60,12 @@ export class OrderProxy extends OrderEntity {
     return result;
   }
 
+  public withPaymentState(paymentState: PaymentState) {
+    let result = this.clone();
+    result.paymentState = paymentState;
+    return result;
+  }
+
   public clone(): OrderProxy {
     const result: OrderProxy = Object.assign(Object.create(this), this);
 
