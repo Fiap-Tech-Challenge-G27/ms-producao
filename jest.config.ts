@@ -18,6 +18,10 @@ export default async (): Promise<Config.InitialOptions> => {
       "^.+\\.(t|j)s$": "ts-jest",
     },
     collectCoverageFrom: ["**/*.(t|j)s"],
-    coverageDirectory: "./coverage",
+    coverageDirectory: "../coverage",
+    coveragePathIgnorePatterns: [
+      "app.module.ts",
+      "main.ts"
+    ]
   };
 };
