@@ -1,10 +1,9 @@
-import { customerMother } from "@modules/orders/tests/customerId.mother";
+import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import { AuthGuard } from "./auth.guard";
-import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { randomId } from "@shared/tests/random";
+import { AuthGuard } from "./auth.guard";
 
 function getResponseMock(authorization: string) {
   return {

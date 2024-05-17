@@ -1,8 +1,8 @@
-import { ProductEntity } from "./product.entity";
-import { CreateProductDto } from "../dtos/create-product.dto";
-import { UpdateProductDto } from "../dtos/update-product.dto";
 import { CategoryEntity } from "@categories/core/category.entity";
 import { Mapper } from "@shared/core/mapper";
+import { CreateProductDto } from "../dtos/create-product.dto";
+import { UpdateProductDto } from "../dtos/update-product.dto";
+import { ProductEntity } from "./product.entity";
 
 export class ProductMapper extends Mapper<
   { category: CategoryEntity; dataDto: CreateProductDto | UpdateProductDto },

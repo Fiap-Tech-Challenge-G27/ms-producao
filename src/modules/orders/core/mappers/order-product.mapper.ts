@@ -1,6 +1,6 @@
 import { ProductEntity } from "@products/core/product.entity";
-import { OrderProductEntity } from "../order.entity";
 import { Mapper } from "@shared/core/mapper";
+import { OrderProductEntity } from "../order.entity";
 
 export class OrderProductMapper extends Mapper<
   { product: ProductEntity; amount: number },

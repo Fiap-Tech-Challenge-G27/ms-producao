@@ -1,13 +1,12 @@
-import { ProductsController } from "../controller/products.controller";
-import { Repository, UpdateResult } from "typeorm";
+import { Category } from "@modules/categories/infra/typeorm/entities/category";
+import { categoryMother } from "@modules/categories/tests/category.mother";
 import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { ProductsController } from "../controller/products.controller";
 import { Product } from "../infra/typeorm/entities/product";
 import { basicProductsModuleMetadata } from "../products.module";
-import { Category } from "@modules/categories/infra/typeorm/entities/category";
 import { productMother } from "./products.mother";
-import { categoryMother } from "@modules/categories/tests/category.mother";
-import { BadRequestException } from "@nestjs/common";
 
 describe("/products", () => {
   let productsController: ProductsController;

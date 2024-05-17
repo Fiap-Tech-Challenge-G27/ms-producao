@@ -1,6 +1,6 @@
+import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import { PostgresConfigServiceService } from "./postgres.service";
-import { ConfigService } from "@nestjs/config";
 
 describe("PostgresConfigServiceService", () => {
   let databaseUrl = "mock";

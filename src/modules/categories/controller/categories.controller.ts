@@ -1,20 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  ParseUUIDPipe,
+    Body,
+    Controller,
+    Get,
+    Param,
+    ParseUUIDPipe,
+    Patch,
+    Post,
 } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { CreateCategoryDto } from "../dtos/create-category.dto";
 import { UpdateCategoryDto } from "../dtos/update-category.dto";
-import { ApiTags } from "@nestjs/swagger";
 import {
-  CreateCategoryUseCase,
-  UpdateCategoryUseCase,
-  FindCategoryUseCase,
-  FindAllCategoriesUseCase,
+    CreateCategoryUseCase,
+    FindAllCategoriesUseCase,
+    FindCategoryUseCase,
+    UpdateCategoryUseCase,
 } from "../use-cases";
 
 @ApiTags("categories")

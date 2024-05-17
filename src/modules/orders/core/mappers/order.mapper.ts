@@ -1,5 +1,5 @@
-import { OrderEntity, OrderProductEntity } from "../order.entity";
 import { Mapper } from "@shared/core/mapper";
+import { OrderEntity, OrderProductEntity } from "../order.entity";
 
 export class OrderMapper extends Mapper<
   { customerId: string; orderProductsEntity: OrderProductEntity[] },

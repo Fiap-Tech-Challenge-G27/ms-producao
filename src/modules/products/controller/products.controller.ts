@@ -1,22 +1,22 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  ParseUUIDPipe,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseUUIDPipe,
+    Patch,
+    Post,
 } from "@nestjs/common";
-import { UpdateProductDto } from "../dtos/update-product.dto";
 import { ApiTags } from "@nestjs/swagger";
-import {
-  CreateProductUseCase,
-  FindAllProductsUseCase,
-  RemoveProductUseCase,
-  UpdateProductUseCase,
-} from "../use-cases";
 import { CreateProductDto } from "../dtos/create-product.dto";
+import { UpdateProductDto } from "../dtos/update-product.dto";
+import {
+    CreateProductUseCase,
+    FindAllProductsUseCase,
+    RemoveProductUseCase,
+    UpdateProductUseCase,
+} from "../use-cases";
 
 @ApiTags("products")
 @Controller("products")

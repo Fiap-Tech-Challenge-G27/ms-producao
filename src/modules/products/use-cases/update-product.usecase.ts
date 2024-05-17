@@ -1,9 +1,9 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { IProductRepository } from "../core/product-repository.abstract";
-import { UseCase } from "@shared/core/use-case";
-import { UpdateProductDto } from "../dtos/update-product.dto";
-import { IExceptionService } from "@shared/exceptions/exceptions.interface";
 import { ICategoryRepository } from "@modules/categories/core/category-repository.abstract";
+import { Inject, Injectable } from "@nestjs/common";
+import { UseCase } from "@shared/core/use-case";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
+import { IProductRepository } from "../core/product-repository.abstract";
+import { UpdateProductDto } from "../dtos/update-product.dto";
 
 @Injectable()
 export class UpdateProductUseCase implements UseCase {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IProductRepository } from "../core/product-repository.abstract";
 import { UseCase } from "@shared/core/use-case";
 import { IExceptionService } from "@shared/exceptions/exceptions.interface";
+import { IProductRepository } from "../core/product-repository.abstract";
 
 @Injectable()
 export class RemoveProductUseCase implements UseCase {

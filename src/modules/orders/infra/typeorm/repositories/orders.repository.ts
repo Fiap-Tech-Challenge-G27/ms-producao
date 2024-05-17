@@ -1,12 +1,12 @@
+import { CategoryEntity } from "@categories/core/category.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { OrderEntity, OrderProductEntity } from "@orders/core/order.entity";
 import { IOrderRepository } from "@orders/core/order-repository.abstract";
+import { OrderEntity, OrderProductEntity } from "@orders/core/order.entity";
+import { ProductEntity } from "@products/core/product.entity";
 import { Repository } from "typeorm";
 import { Order } from "../entities/order";
 import { OrdersProductsAmounts } from "../entities/orders-products-amounts";
-import { ProductEntity } from "@products/core/product.entity";
-import { CategoryEntity } from "@categories/core/category.entity";
 
 @Injectable()
 export class OrderRepository implements IOrderRepository {

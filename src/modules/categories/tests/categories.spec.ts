@@ -1,3 +1,4 @@
+import { productMother } from "@modules/products/tests/products.mother";
 import { BadRequestException } from "@nestjs/common/exceptions/bad-request.exception";
 import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
@@ -6,7 +7,6 @@ import { basicCategoriesModuleMetadata } from "../categories.module";
 import { CategoriesController } from "../controller/categories.controller";
 import { Category } from "../infra/typeorm/entities/category";
 import { categoryMother } from "./category.mother";
-import { productMother } from "@modules/products/tests/products.mother";
 
 describe("/categories", () => {
   let categoriesController: CategoriesController;

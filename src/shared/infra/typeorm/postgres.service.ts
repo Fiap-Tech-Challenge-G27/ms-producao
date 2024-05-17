@@ -1,11 +1,11 @@
+import { Category } from "@modules/categories/infra/typeorm/entities/category";
+import { Order } from "@modules/orders/infra/typeorm/entities/order";
+import { OrdersProductsAmounts } from "@modules/orders/infra/typeorm/entities/orders-products-amounts";
+import { Product } from "@modules/products/infra/typeorm/entities/product";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmOptionsFactory } from "@nestjs/typeorm";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm/dist";
-import { Product } from "@modules/products/infra/typeorm/entities/product";
-import { Order } from "@modules/orders/infra/typeorm/entities/order";
-import { Category } from "@modules/categories/infra/typeorm/entities/category";
-import { OrdersProductsAmounts } from "@modules/orders/infra/typeorm/entities/orders-products-amounts";
 
 @Injectable()
 export class PostgresConfigServiceService implements TypeOrmOptionsFactory {

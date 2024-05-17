@@ -1,11 +1,11 @@
+import { CategoryEntity } from "@modules/categories/core/category.entity";
 import {
-  randomEntityDates,
-  randomFloat,
-  randomId,
-  randomInt,
+    randomEntityDates,
+    randomFloat,
+    randomId,
+    randomInt,
 } from "@shared/tests/random";
 import { ProductEntity } from "../core/product.entity";
-import { CategoryEntity } from "@modules/categories/core/category.entity";
 
 export class ProductProxy extends ProductEntity {
   constructor(name: string, description: string, category: CategoryEntity) {

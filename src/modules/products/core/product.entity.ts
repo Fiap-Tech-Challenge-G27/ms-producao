@@ -12,8 +12,8 @@ export class ProductEntity extends Entity {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-
-  constructor(
+  
+  constructor( // NOSONAR
     name: string,
     description: string,
     price: number,
@@ -24,7 +24,7 @@ export class ProductEntity extends Entity {
     createdAt?: Date,
     updatedAt?: Date,
     deletedAt?: Date,
-  ) {
+  ) { // NOSONAR
     super();
     this.name = name;
     this.description = description;

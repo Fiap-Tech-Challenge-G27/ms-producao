@@ -1,12 +1,11 @@
+import {
+    BadRequestException,
+    ForbiddenException,
+    InternalServerErrorException,
+    NotFoundException
+} from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ExceptionsService } from "./exceptions.service";
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from "@nestjs/common";
 
 describe("ExceptionsService", () => {
   let service: ExceptionsService;
