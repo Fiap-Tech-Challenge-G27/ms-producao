@@ -1,9 +1,6 @@
-import { randomId, randomEntityDates } from "@shared/tests/random";
-import { v4 as uuidv4 } from "uuid";
+import { randomEntityDates, randomId } from "@shared/tests/random";
 import { CategoryEntity } from "../core/category.entity";
-import { Category } from "../infra/typeorm/entities/category";
 import { CreateCategoryDto } from "../dtos/create-category.dto";
-import { ProductEntity } from "@modules/products/core/product.entity";
 
 export class CategoryProxy extends CategoryEntity {
   public constructor(name: string, description: string) {

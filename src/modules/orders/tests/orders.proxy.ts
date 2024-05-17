@@ -1,13 +1,13 @@
-import {
-  OrderEntity,
-  OrderProductEntity,
-  OrderState,
-  PaymentState,
-} from "../core/order.entity";
 import { ProductEntity } from "@modules/products/core/product.entity";
-import { customerMother } from "./customerId.mother";
-import { CreateOrderDto, OrderProducts } from "../dtos/create-order.dto";
 import { randomEntityDates, randomId } from "@shared/tests/random";
+import {
+    OrderEntity,
+    OrderProductEntity,
+    OrderState,
+    PaymentState,
+} from "../core/order.entity";
+import { CreateOrderDto, OrderProducts } from "../dtos/create-order.dto";
+import { customerMother } from "./customerId.mother";
 
 export class OrderProxy extends OrderEntity {
   public constructor(

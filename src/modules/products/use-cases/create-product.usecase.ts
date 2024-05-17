@@ -1,10 +1,10 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { CreateProductDto } from "../dtos/create-product.dto";
 import { ICategoryRepository } from "@categories/core/category-repository.abstract";
-import { IProductRepository } from "../core/product-repository.abstract";
-import { IExceptionService } from "@shared/exceptions/exceptions.interface";
-import { ProductMapper } from "../core/product.mapper";
+import { Inject, Injectable } from "@nestjs/common";
 import { UseCase } from "@shared/core/use-case";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
+import { IProductRepository } from "../core/product-repository.abstract";
+import { ProductMapper } from "../core/product.mapper";
+import { CreateProductDto } from "../dtos/create-product.dto";
 
 @Injectable()
 export class CreateProductUseCase implements UseCase {

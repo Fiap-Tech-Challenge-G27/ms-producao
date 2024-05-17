@@ -1,9 +1,9 @@
 import {
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
 import { Product } from "./product";
 

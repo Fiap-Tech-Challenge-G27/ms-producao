@@ -1,6 +1,6 @@
 import { productMother } from "@modules/products/tests/products.mother";
-import { OrderProxy } from "./orders.proxy";
 import { OrderState, PaymentState } from "../core/order.entity";
+import { OrderProxy } from "./orders.proxy";
 
 export const orderMother = {
   sugar_overdose: new OrderProxy(

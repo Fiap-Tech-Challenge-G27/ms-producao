@@ -1,5 +1,5 @@
-import { Entity } from "@shared/core/entity";
 import { ProductEntity } from "@products/core/product.entity";
+import { Entity } from "@shared/core/entity";
 
 export class CategoryEntity extends Entity {
   id: string;

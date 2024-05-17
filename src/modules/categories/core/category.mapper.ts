@@ -1,7 +1,7 @@
-import { CategoryEntity } from "./category.entity";
+import { Mapper } from "@shared/core/mapper";
 import { CreateCategoryDto } from "../dtos/create-category.dto";
 import { UpdateCategoryDto } from "../dtos/update-category.dto";
-import { Mapper } from "@shared/core/mapper";
+import { CategoryEntity } from "./category.entity";
 
 export class CategoryMapper extends Mapper<
   CreateCategoryDto | UpdateCategoryDto,

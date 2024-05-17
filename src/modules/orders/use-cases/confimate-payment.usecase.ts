@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IExceptionService } from "@shared/exceptions/exceptions.interface";
-import { UseCase } from "@shared/core/use-case";
 import { OrderState, PaymentState } from "@orders/core/order.entity";
+import { UseCase } from "@shared/core/use-case";
+import { IExceptionService } from "@shared/exceptions/exceptions.interface";
 import { IOrderRepository } from "../core/order-repository.abstract";
 
 const PAYMENT_STATUS_MAP = new Map<string, PaymentState>([

@@ -1,13 +1,13 @@
 import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
+    BadRequestException,
+    ForbiddenException,
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException,
 } from "@nestjs/common";
 import {
-  IExceptionService,
-  IExceptionBody,
+    IExceptionBody,
+    IExceptionService,
 } from "@shared/exceptions/exceptions.interface";
 
 @Injectable()

@@ -1,5 +1,4 @@
 import { categoryMother } from "@modules/categories/tests/category.mother";
-import { Product } from "../infra/typeorm/entities/product";
 import { ProductProxy } from "./products.proxy";
 
 export const productMother = {

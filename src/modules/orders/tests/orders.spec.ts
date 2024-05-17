@@ -1,23 +1,21 @@
-import { Product } from "@modules/products/infra/typeorm/entities/product";
-import { OrdersController } from "../controller/orders.controller";
-import { Repository, UpdateResult } from "typeorm";
 import { Category } from "@modules/categories/infra/typeorm/entities/category";
-import { basicProductModuleMetadata } from "../orders.module";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { Order } from "../infra/typeorm/entities/order";
-import { Test, TestingModule } from "@nestjs/testing";
-import { OrdersProductsAmounts } from "../infra/typeorm/entities/orders-products-amounts";
+import { Product } from "@modules/products/infra/typeorm/entities/product";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
+import { Test, TestingModule } from "@nestjs/testing";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { OrdersController } from "../controller/orders.controller";
+import { OrderState, PaymentState } from "../core/order.entity";
+import { IPaymentGateway } from "../core/payment-gateway";
+import { Order } from "../infra/typeorm/entities/order";
+import { OrdersProductsAmounts } from "../infra/typeorm/entities/orders-products-amounts";
+import { basicProductModuleMetadata } from "../orders.module";
 import { customerMother } from "./customerId.mother";
 import { orderMother } from "./order.mother";
-import { IPaymentGateway } from "../core/payment-gateway";
-import { OrderState, PaymentState } from "../core/order.entity";
 
 describe("/orders", () => {
   let ordersController: OrdersController;
-  let productRepositoryMock: Repository<Product>;
-  let categoryRepositoryMock: Repository<Category>;
   let orderRepositoryMock: Repository<Order>;
   let orderProductsAmountsRepositoryMock: Repository<OrdersProductsAmounts>;
 
@@ -67,12 +65,6 @@ describe("/orders", () => {
       await Test.createTestingModule(moduleMetadata).compile();
 
     ordersController = module.get<OrdersController>(OrdersController);
-    categoryRepositoryMock = module.get<Repository<Category>>(
-      getRepositoryToken(Category)
-    );
-    productRepositoryMock = module.get<Repository<Product>>(
-      getRepositoryToken(Product)
-    );
     orderRepositoryMock = module.get<Repository<Order>>(
       getRepositoryToken(Order)
     );
@@ -201,7 +193,7 @@ describe("/orders", () => {
         .spyOn(orderRepositoryMock, "save")
         .mockResolvedValueOnce(order);
 
-      const response = await ordersController.receivePaymentConfirmation({
+      await ordersController.receivePaymentConfirmation({
         identifier: { order_id: order.id },
         status: "approved",
       });

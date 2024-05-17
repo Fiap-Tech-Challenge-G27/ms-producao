@@ -1,10 +1,10 @@
+import { ICategoryRepository } from "@categories/core/category-repository.abstract";
+import { CategoryEntity } from "@modules/categories/core/category.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ProductEntity } from "@products/core/product.entity";
 import { Repository } from "typeorm";
 import { Category } from "../entities/category";
-import { ICategoryRepository } from "@categories/core/category-repository.abstract";
-import { ProductEntity } from "@products/core/product.entity";
-import { CategoryEntity } from "@modules/categories/core/category.entity";
 
 @Injectable()
 export class CategoryRepository implements ICategoryRepository {

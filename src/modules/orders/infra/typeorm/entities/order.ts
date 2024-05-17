@@ -1,13 +1,13 @@
+import { OrderState, PaymentState } from "@orders/core/order.entity";
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
 import { OrdersProductsAmounts } from "./orders-products-amounts";
-import { OrderState, PaymentState } from "@orders/core/order.entity";
 
 @Entity({ name: "orders" })
 export class Order {

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { IProductRepository } from "../core/product-repository.abstract";
 import { UseCase } from "@shared/core/use-case";
+import { IProductRepository } from "../core/product-repository.abstract";
 
 @Injectable()
 export class FindAllProductsUseCase implements UseCase {

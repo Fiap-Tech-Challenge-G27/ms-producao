@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
 import { IPaymentGateway } from "@modules/orders/core/payment-gateway";
+import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class PaymentGateway implements IPaymentGateway {
       },
     };
 
-    const response = await fetch(url, {
+    await fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json; charset=UTF-8" },
