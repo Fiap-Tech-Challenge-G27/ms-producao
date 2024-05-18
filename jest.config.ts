@@ -17,7 +17,7 @@ export default async (): Promise<Config.InitialOptions> => {
     transform: {
       "^.+\\.(t|j)s$": "ts-jest",
     },
-    collectCoverageFrom: ["**/*.(t|j)s"],
+    collectCoverageFrom: ["src/**/*.(t|j)s"],
     coverageDirectory: "./coverage",
     reporters: ['default',  ['jest-sonar', {
       outputDirectory: "coverage",

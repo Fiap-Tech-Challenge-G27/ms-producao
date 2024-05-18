@@ -7,7 +7,7 @@ import { OrderEntity } from "../core/order.entity";
 export class FindAllOrdersUseCase implements UseCase {
   constructor(
     @Inject(IOrderRepository)
-    private readonly orderRepository: IOrderRepository
+    private readonly orderRepository: IOrderRepository,
   ) {}
 
   private readonly statePriority: Record<string, number> = {
@@ -20,14 +20,12 @@ export class FindAllOrdersUseCase implements UseCase {
     const orders = await this.orderRepository.findAllByCustomerId(customerId);
 
     const filteredOrders = orders.filter(
-      (order: OrderEntity) => order.state !== "Finished"
+      (order: OrderEntity) => order.state !== "Finished",
     );
 
     const sortedOrders = filteredOrders.sort((a, b) => {
-      const getStateOrder = (order) =>
-        this.statePriority[order.state] ?? Number.MAX_SAFE_INTEGER;
-
-      const stateOrder = getStateOrder(a) - getStateOrder(b);
+      const stateOrder =
+      this.statePriority[a.state] - this.statePriority[b.state];
       if (stateOrder !== 0) {
         return stateOrder;
       }
