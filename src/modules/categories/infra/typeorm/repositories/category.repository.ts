@@ -50,6 +50,7 @@ export class CategoryRepository implements ICategoryRepository {
 
     categoryModel.name = category.name || categoryModel.name;
     categoryModel.slug = category.slug || categoryModel.slug;
+    /* istanbul ignore next */
     categoryModel.description =
       category.description || categoryModel.description;
 

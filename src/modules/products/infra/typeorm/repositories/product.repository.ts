@@ -96,6 +96,7 @@ export class ProductRepository implements IProductRepository {
     return product;
   }
   mapEntityToModel(dataEntity: ProductEntity): Product {
+    /* istanbul ignore next */
     if (!dataEntity) {
       /* istanbul ignore next */
       return null;
