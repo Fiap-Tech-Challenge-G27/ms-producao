@@ -97,14 +97,16 @@ defineFeature(feature, (test) => {
     let order = undefined;
     let saveCall = undefined;
 
-    GivenMyOrderIs(given, (newOrder) => {order = newOrder})
+    GivenMyOrderIs(given, (newOrder) => {
+      order = newOrder;
+    });
 
     when("I pay my order", async () => {
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
       const saveMock = jest
         .spyOn(orderRepositoryMock, "save")
         .mockResolvedValueOnce(order);
-    
+
       await ordersController.receivePaymentConfirmation({
         identifier: { order_id: order.id },
         status: "approved",
@@ -118,5 +120,29 @@ defineFeature(feature, (test) => {
     then("My order's payment state is approved", () => {
       expect(saveCall["paymentState"]).toBe(PaymentState.Approved);
     });
+  });
+
+  test("Preparate", ({ given, when, then }) => {
+    let order = undefined;
+    let saveCall = undefined;
+
+    GivenMyOrderIs(given, (newOrder) => {
+      order = newOrder;
+    });
+
+    when("I wait the my order preparation", async () => {
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+      const saveMock = jest
+        .spyOn(orderRepositoryMock, "save")
+        .mockResolvedValueOnce(order);
+
+      await ordersController.updateOrderStatus(order.id, {
+        state: OrderState.Done,
+      });
+
+      saveCall = saveMock.mock.calls[0][0];
+    });
+
+    ThenMyOrderIs(then, () => saveCall);
   });
 });

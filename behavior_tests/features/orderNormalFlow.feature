@@ -5,10 +5,10 @@ Feature: Order Normal Flow
         Then My order is in preparation
         Then My order's payment state is approved
 
-    # Scenario:
-    #     Given My order is in preparation
-    #     When I wait the my order preparation
-    #     Then My order is Done
+    Scenario: Preparate
+        Given My order is in preparation
+        When I wait the my order preparation
+        Then My order is done
     
     # Scenario:
     #     Given My order was done
