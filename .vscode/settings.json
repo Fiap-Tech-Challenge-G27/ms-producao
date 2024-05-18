@@ -1,0 +1,8 @@
+{
+    "cucumber.features": [
+        "behavior_tests/features/*.feature"
+    ],
+    "cucumber.glue": [
+        "behavior_tests/step-definitions/*.ts"
+    ]
+}
