@@ -106,7 +106,6 @@ export class OrderRepository implements IOrderRepository {
   }
 
   mapModelToEntity(orderModel: Order): OrderEntity {
-    if (!orderModel) return null;
     const order = new OrderEntity(
       orderModel.customerId,
       orderModel.orderProductsAmounts.map(function (item) {

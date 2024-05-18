@@ -14,7 +14,7 @@ export class OrderProxy extends OrderEntity {
     orderProduct: Array<[ProductEntity, number]>,
     state: OrderState,
     paymentState: PaymentState,
-    createdAt: Date = undefined,
+    createdAt: Date,
     updatedAt: Date = undefined
   ) {
     let orderProducts = orderProduct.map(
@@ -28,7 +28,7 @@ export class OrderProxy extends OrderEntity {
     }
 
     const defaultDates = randomEntityDates(createdAt);
-    this.createdAt = createdAt || defaultDates.createdAt;
+    this.createdAt = createdAt
     this.updatedAt = updatedAt || defaultDates.updatedAt;
   }
 
