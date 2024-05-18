@@ -10,7 +10,7 @@ Feature: Order Normal Flow
         When I wait the my order preparation
         Then My order is done
     
-    # Scenario:
-    #     Given My order was done
-    #     When I get my order
-    #     Then My order was finished
+    Scenario: Finish
+        Given My order was done
+        When I get my order
+        Then My order was finished

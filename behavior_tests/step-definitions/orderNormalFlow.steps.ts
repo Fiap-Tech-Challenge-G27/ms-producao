@@ -145,4 +145,28 @@ defineFeature(feature, (test) => {
 
     ThenMyOrderIs(then, () => saveCall);
   });
+
+  test("Finish", ({ given, when, then }) => {
+    let order = undefined;
+    let saveCall = undefined;
+
+    GivenMyOrderIs(given, (newOrder) => {
+      order = newOrder;
+    });
+
+    when("I get my order", async () => {
+      jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+      const saveMock = jest
+        .spyOn(orderRepositoryMock, "save")
+        .mockResolvedValueOnce(order);
+
+      await ordersController.updateOrderStatus(order.id, {
+        state: OrderState.Finished,
+      });
+
+      saveCall = saveMock.mock.calls[0][0];
+    });
+
+    ThenMyOrderIs(then, () => saveCall);
+  });
 });
