@@ -131,5 +131,4 @@ dist
 .docker/postgres
 minikube.exe
 kubectl.exe
-
-docker-compose.yml
+.vscode

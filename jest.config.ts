@@ -12,8 +12,8 @@ export default async (): Promise<Config.InitialOptions> => {
     verbose: true,
     moduleFileExtensions: ["js", "json", "ts"],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: __dirname}),
-    rootDir: "src",
-    testRegex: ".*\\.spec\\.ts$",
+    rootDir: ".",
+    testRegex: ".*\\.(spec|steps)\\.ts$",
     transform: {
       "^.+\\.(t|j)s$": "ts-jest",
     },
