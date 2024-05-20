@@ -85,5 +85,6 @@ jobs:
 
       - name: Deploy to AWS EKS
         run: |
+          kubectl apply -f kubernetes/secretproviderclass.yaml
           kubectl apply -f kubernetes/ms-producao-deployment.yaml
           kubectl apply -f kubernetes/ms-producao-service.yml

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-producao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-producao
+  template:
+    metadata:
+      labels:
+        app: ms-producao
+    spec:
+      serviceAccountName: irsasecrets
+      containers:
+        - name: ms-producao
+          image: 851725345801.dkr.ecr.us-east-1.amazonaws.com/ms-producao:{{VERSION}}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "0.25"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          env:
+            - name: TYPEORM_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: typeorm
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aws-secrets-ms-producao"  # Nome do seu SecretProviderClass
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ms-producao
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ms-producao
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
