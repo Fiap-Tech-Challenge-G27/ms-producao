@@ -46,14 +46,13 @@ export class CreateOrderUseCase implements UseCase {
         code: 400,
       });
     }
-
     const orderProductsEntity = await this.getOrderProducts(orderProducts);
-
+    
     const order = this.orderMapper.mapFrom({
       customerId,
       orderProductsEntity,
     });
-
+    
     const result = await this.orderRepository.create(order);
     await this.paymentGateway.create(result.id);
     

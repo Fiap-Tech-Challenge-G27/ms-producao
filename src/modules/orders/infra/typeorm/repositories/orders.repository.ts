@@ -26,7 +26,7 @@ export class OrderRepository implements IOrderRepository {
       order.orderProductsAmounts.map(async (orderProduct) => {
         return await this._saveOrderProductAmountModel(
           orderCreated,
-          orderProduct.product,
+          orderProduct.product_id,
           orderProduct.amount
         );
       })
@@ -37,15 +37,15 @@ export class OrderRepository implements IOrderRepository {
 
   private async _saveOrderProductAmountModel(
     orderModel: Order,
-    product: ProductEntity,
+    product_id: string,
     amount: number
   ) {
     const order_product_amount_model: OrdersProductsAmounts =
       new OrdersProductsAmounts();
 
-    order_product_amount_model.order = orderModel;
+    order_product_amount_model.order_id = orderModel.id;
     order_product_amount_model.amount = amount;
-    order_product_amount_model.product = product;
+    order_product_amount_model.product_id = product_id;
 
     return this.orderProductAmountRepository.save(order_product_amount_model);
   }
@@ -110,29 +110,40 @@ export class OrderRepository implements IOrderRepository {
       orderModel.customerId,
       orderModel.orderProductsAmounts.map(function (item) {
         const productItem = item.product;
-        const categoryItem = item.product.category;
-        const product = new ProductEntity(
-          productItem.name,
-          productItem.description,
+        
+        if(productItem) {
+          const categoryItem = item.product.category;
+          let category: CategoryEntity = undefined;
 
-          productItem.price,
-          productItem.quantity,
-          productItem.status,
-          new CategoryEntity(
-            categoryItem.name,
-            categoryItem.slug,
-            categoryItem.description,
-            categoryItem.id,
-            categoryItem.createdAt,
-            categoryItem.updatedAt,
-            []
-          ),
-          productItem.id,
-          productItem.createdAt,
-          productItem.updatedAt,
-          productItem.deletedAt
-        );
-        return new OrderProductEntity(product, item.amount);
+          if (categoryItem) {
+            category = new CategoryEntity(
+              categoryItem.name,
+              categoryItem.slug,
+              categoryItem.description,
+              categoryItem.id,
+              categoryItem.createdAt,
+              categoryItem.updatedAt,
+              []
+            );
+          }
+
+          const product = new ProductEntity(
+            productItem.name,
+            productItem.description,
+  
+            productItem.price,
+            productItem.quantity,
+            productItem.status,
+            category,
+            productItem.id,
+            productItem.createdAt,
+            productItem.updatedAt,
+            productItem.deletedAt
+          );
+          return new OrderProductEntity(product, item.amount);
+        }
+        
+        return undefined
       }),
       orderModel.state,
       orderModel.paymentState
