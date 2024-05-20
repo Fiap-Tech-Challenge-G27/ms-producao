@@ -1,3 +1,4 @@
+import { Product } from "@modules/products/infra/typeorm/entities/product";
 import { ProductEntity } from "@products/core/product.entity";
 import { Entity } from "@shared/core/entity";
 import { Order } from "../infra/typeorm/entities/order";
@@ -16,15 +17,22 @@ export enum PaymentState {
 }
 
 export class OrderProductEntity extends Entity {
-  order: OrderEntity;
-  product: ProductEntity;
   amount: number;
+
+  order_id: string;
+  product_id: string;
+
+  order: Order = undefined
+  product: Product = undefined
 
   constructor(product: ProductEntity, amount: number, order?: Order) {
     super();
-    this.product = product;
     this.amount = amount;
-    this.order = order;
+
+    if(order) {
+      this.order_id = order.id;
+    }
+    this.product_id = product.id;
   }
 }
 export class OrderEntity extends Entity {
@@ -44,9 +52,6 @@ export class OrderEntity extends Entity {
     paymentState: PaymentState = PaymentState.Pending
   ) {
     super();
-    for (let orderProductAmount of orderProductsAmounts) {
-      orderProductAmount.order = this;
-    }
 
     this.customerId = customerId;
     this.orderProductsAmounts = orderProductsAmounts;

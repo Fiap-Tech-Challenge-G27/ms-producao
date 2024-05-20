@@ -74,13 +74,9 @@ export class ProductRepository implements IProductRepository {
       return null;
     }
 
-    const product = new ProductEntity(
-      dataModel.name,
-      dataModel.description,
-      dataModel.price,
-      dataModel.quantity,
-      dataModel.status,
-      new CategoryEntity(
+    let category: CategoryEntity = undefined;
+    if (dataModel.category) {
+      category = new CategoryEntity(
         dataModel.category.name,
         dataModel.category.slug,
         dataModel.category.description,
@@ -88,7 +84,16 @@ export class ProductRepository implements IProductRepository {
         dataModel.category.createdAt,
         dataModel.category.updatedAt,
         []
-      )
+      );
+    }
+
+    const product = new ProductEntity(
+      dataModel.name,
+      dataModel.description,
+      dataModel.price,
+      dataModel.quantity,
+      dataModel.status,
+      category
     );
     product.id = dataModel.id;
     product.createdAt = dataModel.createdAt;

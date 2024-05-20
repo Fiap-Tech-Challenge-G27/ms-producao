@@ -24,7 +24,7 @@ export class OrderProxy extends OrderEntity {
     super(customerMother.customer.id, orderProducts, state, paymentState);
 
     for (let orderProductAmount of this.orderProductsAmounts) {
-      orderProductAmount.order = this;
+      orderProductAmount.order_id = this.id;
     }
 
     const defaultDates = randomEntityDates(createdAt);

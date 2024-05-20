@@ -2,6 +2,7 @@ import { randomEntityDates, randomId } from "@shared/tests/random";
 import { CategoryEntity } from "../core/category.entity";
 import { CreateCategoryDto } from "../dtos/create-category.dto";
 
+
 export class CategoryProxy extends CategoryEntity {
   public constructor(name: string, description: string) {
     super(name, name + " (slug)", description);
@@ -11,7 +12,7 @@ export class CategoryProxy extends CategoryEntity {
     const { createdAt, updatedAt } = randomEntityDates();
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-
+    
     this.products = [];
   }
 
@@ -31,7 +32,14 @@ export class CategoryProxy extends CategoryEntity {
 
   public withProducts(productMother: object) {
     let result = this.clone();
-    result.products = this.cloneProducts(Object.values(productMother), result);
+    result.products = Object.values(productMother).map((product) => product.clone(result));
+
+    return result;
+  }
+
+  public withoutCircularReference() {
+    let result = this.clone();
+    result.products = this.products.map((product: any) => product.clone(undefined));
 
     return result;
   }
@@ -44,7 +52,7 @@ export class CategoryProxy extends CategoryEntity {
 
   private cloneProducts(products: Array<any>, newCategory: CategoryProxy) {
     return products
-      .filter((product) => product.category.id == this.id)
+      .filter((product) => product.category && product.category.id == this.id)
       .map((product) => product.clone(newCategory));
   }
 }

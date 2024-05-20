@@ -26,8 +26,7 @@ describe("payment-gateway", () => {
     const orderId = randomId();
 
     paymentGateway.create(orderId)
-
-    console.log(fetchMock.mock.calls)
+    
     const calls = fetchMock.mock.calls
 
     expect(calls.length).toBe(1)

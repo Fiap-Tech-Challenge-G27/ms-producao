@@ -5,6 +5,8 @@ import { Order } from "./order";
 @Entity({ name: "orders_products" })
 export class OrdersProductsAmounts {
   @PrimaryColumn("uuid")
+  order_id: string;
+
   @ManyToOne(
     /* istanbul ignore next */ () => Order,
     /* istanbul ignore next */
@@ -13,10 +15,12 @@ export class OrdersProductsAmounts {
       cascade: true,
     }
   )
-  @JoinColumn({ name: "order_id" })
+  @JoinColumn({ name: 'order_id' })
   order: Order;
 
   @PrimaryColumn("uuid")
+  product_id: string
+
   @ManyToOne(/* istanbul ignore next */ () => Product, { eager: true })
   @JoinColumn({ name: "product_id" })
   product: Product;

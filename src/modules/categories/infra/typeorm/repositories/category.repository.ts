@@ -63,7 +63,7 @@ export class CategoryRepository implements ICategoryRepository {
     if (!dataModel) {
       return null;
     }
-    let productsEntity: ProductEntity[];
+    let productsEntity: ProductEntity[] = [];
     if (dataModel.products) {
       productsEntity = dataModel.products.map((product) => {
         const newProduct = new ProductEntity(
@@ -72,7 +72,7 @@ export class CategoryRepository implements ICategoryRepository {
           product.price,
           product.quantity,
           product.status,
-          product.category,
+          undefined,
           product.id,
           product.createdAt,
           product.updatedAt,
@@ -92,8 +92,6 @@ export class CategoryRepository implements ICategoryRepository {
       dataModel.updatedAt,
       productsEntity
     );
-
-
 
     return category;
   }
