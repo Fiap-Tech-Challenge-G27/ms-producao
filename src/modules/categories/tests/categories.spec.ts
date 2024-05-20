@@ -38,7 +38,9 @@ describe("/categories", () => {
 
   describe("POST", () => {
     it("should create when don't exists", async () => {
-      const category = categoryMother.dessert.withProducts(productMother);
+      const category = categoryMother.dessert
+        .withProducts(productMother)
+        .withoutCircularReference();
 
       jest
         .spyOn(categoryRepositoryMock, "save")
@@ -70,7 +72,14 @@ describe("/categories", () => {
 
   describe("GET", () => {
     it("should return all categories", async () => {
-      const categories = [categoryMother.dessert.withProducts(productMother), categoryMother.hamburger.withProducts(productMother)];
+      const categories = [
+        categoryMother.dessert
+          .withProducts(productMother)
+          .withoutCircularReference(),
+        categoryMother.hamburger
+          .withProducts(productMother)
+          .withoutCircularReference(),
+      ];
 
       jest
         .spyOn(categoryRepositoryMock, "find")
@@ -84,7 +93,7 @@ describe("/categories", () => {
 
   describe("GET /:slug", () => {
     it("should return if exists", async () => {
-      const category = categoryMother.dessert.withProducts(productMother);
+      const category = categoryMother.dessert.withProducts(productMother).withoutCircularReference();
       jest
         .spyOn(categoryRepositoryMock, "findOne")
         .mockResolvedValueOnce(category);
@@ -119,7 +128,7 @@ describe("/categories", () => {
         description,
       });
 
-      expect(response).toEqual(updatedCategory);
+      expect(response).toEqual(updatedCategory.withoutCircularReference());
     });
 
     it("should error when dont exists", async () => {
@@ -134,7 +143,9 @@ describe("/categories", () => {
     });
 
     it("should error when slug already exists", async () => {
-      jest.spyOn(categoryRepositoryMock, "findOne").mockResolvedValue(categoryMother.hamburger);
+      jest
+        .spyOn(categoryRepositoryMock, "findOne")
+        .mockResolvedValue(categoryMother.hamburger);
 
       expect(
         async () =>

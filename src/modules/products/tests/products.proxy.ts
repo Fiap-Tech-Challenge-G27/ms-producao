@@ -1,9 +1,9 @@
 import { CategoryEntity } from "@modules/categories/core/category.entity";
 import {
-    randomEntityDates,
-    randomFloat,
-    randomId,
-    randomInt,
+  randomEntityDates,
+  randomFloat,
+  randomId,
+  randomInt,
 } from "@shared/tests/random";
 import { ProductEntity } from "../core/product.entity";
 
@@ -55,9 +55,7 @@ export class ProductProxy extends ProductEntity {
   public clone(category: CategoryEntity = undefined) {
     const result: ProductProxy = Object.assign(Object.create(this), this);
 
-    if (category) {
-      result.category = category;
-    }
+    result.category = category;
 
     return result;
   }
