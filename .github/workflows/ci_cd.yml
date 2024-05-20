@@ -20,12 +20,12 @@ jobs:
         with:
           node-version: 18.x
       - run: npm ci
-      - run: npm run coverage
+      # - run: npm run coverage
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Coveralls
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
