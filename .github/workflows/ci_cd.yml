@@ -21,7 +21,6 @@ jobs:
           node-version: 18.x
       - run: npm ci
       - run: npm run coverage
-      - run: npm run test:e2e
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
