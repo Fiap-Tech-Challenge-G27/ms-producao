@@ -27,7 +27,7 @@ spec:
             httpGet:
               path: /health
               port: 3000
-            initialDelaySeconds: 120
+            initialDelaySeconds: 360
             periodSeconds: 10
           env:
             - name: TYPEORM_URL
