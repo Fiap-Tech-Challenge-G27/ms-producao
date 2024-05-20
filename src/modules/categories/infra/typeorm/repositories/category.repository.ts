@@ -72,7 +72,7 @@ export class CategoryRepository implements ICategoryRepository {
           product.price,
           product.quantity,
           product.status,
-          undefined,
+          product.category,
           product.id,
           product.createdAt,
           product.updatedAt,
@@ -93,9 +93,7 @@ export class CategoryRepository implements ICategoryRepository {
       productsEntity
     );
 
-    for (const productEntity of productsEntity) {
-      productEntity.category = category;
-    }
+
 
     return category;
   }
