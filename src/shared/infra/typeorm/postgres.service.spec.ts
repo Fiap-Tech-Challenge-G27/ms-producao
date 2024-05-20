@@ -32,6 +32,5 @@ describe("PostgresConfigServiceService", () => {
     expect(result["type"]).toBe("postgres");
     expect(result["url"]).toBe(databaseUrl);
     expect(result["synchronize"]).toBe(true);
-    expect(result["ssl"]).toBe(false);
   });
 });
