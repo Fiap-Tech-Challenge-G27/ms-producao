@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: db-secret
-                  key: typeorm
+                  key: typeormurl
           volumeMounts:
             - name: secrets-store-inline
               mountPath: "/mnt/secrets-store"
