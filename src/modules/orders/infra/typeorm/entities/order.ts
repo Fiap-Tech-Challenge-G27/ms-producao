@@ -1,11 +1,11 @@
 import { OrderState, PaymentState } from "@orders/core/order.entity";
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { OrdersProductsAmounts } from "./orders-products-amounts";
 
@@ -18,7 +18,7 @@ export class Order {
     /* istanbul ignore next */
     () => OrdersProductsAmounts,
     /* istanbul ignore next */
-    (order_product_amount) => order_product_amount.order
+    (order_product_amount) => order_product_amount.order,
   )
   orderProductsAmounts: OrdersProductsAmounts[];
 
@@ -35,7 +35,7 @@ export class Order {
   })
   paymentState: PaymentState;
 
-  @Column({ type: "uuid" })
+  @Column()
   customerId: string;
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
