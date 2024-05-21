@@ -30,6 +30,8 @@ spec:
             initialDelaySeconds: 360
             periodSeconds: 10
           env:
+            - name: PAYMENT_API_URL
+              value: http://ms-pagamento:3000/initiate
             - name: TYPEORM_URL
               valueFrom:
                 secretKeyRef:
