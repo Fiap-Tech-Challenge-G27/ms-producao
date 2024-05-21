@@ -1,13 +1,13 @@
 import { AuthGuard } from "@modules/auth/auth.guard";
 import {
-    Body,
-    Controller,
-    Get,
-    Param,
-    Patch,
-    Post,
-    Request,
-    UseGuards,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateOrderDto } from "@orders/dtos/create-order.dto";
@@ -27,7 +27,7 @@ export class OrdersController {
     private readonly findAllOrdersUseCase: FindAllOrdersUseCase,
     private readonly findOrderUseCase: FindOrderUseCase,
     private readonly confirmatePaymentUseCase: ConfirmatePaymentUseCase,
-    private readonly updateOrderUseCase: UpdateOrderUseCase //private readonly updateOrderPaymentStateUseCase: UpdateOrderPaymentStateUseCase,
+    private readonly updateOrderUseCase: UpdateOrderUseCase, //private readonly updateOrderPaymentStateUseCase: UpdateOrderPaymentStateUseCase,
   ) {}
 
   @Post()
@@ -36,7 +36,7 @@ export class OrdersController {
   async create(@Body() createOrdersDto: CreateOrderDto, @Request() req) {
     return await this.createOrderUseCase.execute(
       createOrdersDto,
-      req.customer.data.id
+      req.customer.data._id,
     );
   }
 
@@ -44,7 +44,7 @@ export class OrdersController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   findAll(@Request() req) {
-    return this.findAllOrdersUseCase.execute(req.customer.data.id);
+    return this.findAllOrdersUseCase.execute(req.customer.data._id);
   }
 
   @Get(":id")
@@ -55,14 +55,14 @@ export class OrdersController {
   @Patch("/:id/state")
   updateOrderStatus(
     @Param("id") orderId: string,
-    @Body() statusDto: UpdateOrderDto
+    @Body() statusDto: UpdateOrderDto,
   ) {
     return this.updateOrderUseCase.execute(orderId, statusDto);
   }
 
   @Post("/webhooks/payment-confirmation")
   receivePaymentConfirmation(
-    @Body() payment_confirmation: PaymentConfirmationDto
+    @Body() payment_confirmation: PaymentConfirmationDto,
   ): Promise<void> {
     const orderId = payment_confirmation["identifier"]["orderId"];
     const status = payment_confirmation["status"];
