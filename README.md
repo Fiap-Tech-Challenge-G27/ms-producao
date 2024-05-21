@@ -1,7 +1,7 @@
 # ms-producao
 
 Responsabilidade:
-* controlar o gerenciamente de produtos e categorias
+* controlar o gerenciamente de produtos e categorias.
 * informar questões relacionadas ao pedido, andamento por exemplo
 * informar os itens disponíveis para montar os pedidos
 
