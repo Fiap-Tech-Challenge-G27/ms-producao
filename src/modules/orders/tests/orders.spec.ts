@@ -18,6 +18,7 @@ describe("/orders", () => {
   let ordersController: OrdersController;
   let orderRepositoryMock: Repository<Order>;
   let orderProductsAmountsRepositoryMock: Repository<OrdersProductsAmounts>;
+  let productRepositoryMock: Repository<Product>;
 
   let req;
 
@@ -71,6 +72,9 @@ describe("/orders", () => {
     orderProductsAmountsRepositoryMock = module.get<
       Repository<OrdersProductsAmounts>
     >(getRepositoryToken(OrdersProductsAmounts));
+    productRepositoryMock = module.get<Repository<Product>>(
+      getRepositoryToken(Product)
+    );
 
     req = {
       customer: { data: customerMother.customer },
@@ -112,6 +116,11 @@ describe("/orders", () => {
       jest
         .spyOn(orderRepositoryMock, "save")
         .mockResolvedValueOnce(createdOrder.withoutOrderProductsAmounts());
+      jest
+        .spyOn(productRepositoryMock, "findOne")
+        .mockImplementation(async (options) => {
+          return { id: options } as any;
+        });
 
       for (let orderProduct of createdOrder.orderProductsAmounts) {
         jest
@@ -121,7 +130,7 @@ describe("/orders", () => {
 
       const response = await ordersController.create(order.asCreateDTO(), req);
 
-      expect(response).toEqual(createdOrder);
+      expect(response).toEqual(createdOrder.withOrderProductsAsUnderfined());
     });
 
     it("should error when empty", async () => {
@@ -146,9 +155,9 @@ describe("/orders", () => {
       const response = await ordersController.findAll(req);
 
       expect(response).toEqual([
-        orderMother.lunch,
-        orderMother.dinner,
-        orderMother.sugar_overdose,
+        orderMother.lunch.withIdUnderfined().withOrderProductsAsUnderfined(),
+        orderMother.dinner.withIdUnderfined().withOrderProductsAsUnderfined(),
+        orderMother.sugar_overdose.withIdUnderfined().withOrderProductsAsUnderfined(),
       ]);
     });
   });
@@ -161,7 +170,7 @@ describe("/orders", () => {
 
       const response = await ordersController.findOne(order.id);
 
-      expect(response).toEqual(order);
+      expect(response).toEqual(order.withOrderProductsAsUnderfined());
     });
     it("should error when don't exists", async () => {
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
