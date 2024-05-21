@@ -73,7 +73,7 @@ export class OrderProxy extends OrderEntity {
     result.orderProductsAmounts = result.orderProductsAmounts.map(
       (orderProductEntity) =>
         new OrderProductEntity(
-          orderProductEntity.product,
+          {id: orderProductEntity.product_id} as any,
           orderProductEntity.amount,
           result
         )
