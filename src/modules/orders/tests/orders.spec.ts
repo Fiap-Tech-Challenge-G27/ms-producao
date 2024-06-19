@@ -81,6 +81,10 @@ describe("/orders", () => {
     };
   });
 
+  it("should be defined", () => {
+    expect(ordersController).toBeDefined();
+  });
+
   function testPaymentReceivement(
     confirmationStatus: string,
     expectedState: OrderState,
@@ -92,7 +96,7 @@ describe("/orders", () => {
       const saveMock = jest
         .spyOn(orderRepositoryMock, "save")
         .mockResolvedValueOnce(order);
-      await ordersController.receivePaymentConfirmation({
+      const response = await ordersController.receivePaymentConfirmation({
         identifier: { order_id: order.id },
         status: confirmationStatus,
       });
@@ -101,21 +105,20 @@ describe("/orders", () => {
       expect(call["state"]).toBe(expectedState);
       expect(Object.keys(call)).toContain("paymentState");
       expect(call["paymentState"]).toBe(expectedPaymentState);
+      expect(response).toBeJSONStringifiable();
     };
   }
 
-  it("should be defined", () => {
-    expect(ordersController).toBeDefined();
-  });
-
   describe("POST", () => {
     it("should create when ok", async () => {
+      const saveMock = jest.spyOn(orderRepositoryMock, "save");
+
       const order = orderMother.sugar_overdose;
       const createdOrder = order.withRandomId();
 
-      jest
-        .spyOn(orderRepositoryMock, "save")
-        .mockResolvedValueOnce(createdOrder.withoutOrderProductsAmounts());
+      saveMock.mockResolvedValueOnce(
+        createdOrder.withoutOrderProductsAmounts()
+      );
       jest
         .spyOn(productRepositoryMock, "findOne")
         .mockImplementation(async (options) => {
@@ -130,7 +133,12 @@ describe("/orders", () => {
 
       const response = await ordersController.create(order.asCreateDTO(), req);
 
+      expect(saveMock.mock.calls[0][0].customerId).toBe(
+        customerMother.customer._id
+      );
+
       expect(response).toEqual(createdOrder.withOrderProductsAsUnderfined());
+      expect(response).toBeJSONStringifiable();
     });
 
     it("should error when empty", async () => {
@@ -148,17 +156,25 @@ describe("/orders", () => {
 
   describe("GET", () => {
     it("should return all orders", async () => {
+      const findMock = jest.spyOn(orderRepositoryMock, "find");
       const orders = Object.values(orderMother);
 
-      jest.spyOn(orderRepositoryMock, "find").mockResolvedValueOnce(orders);
+      findMock.mockResolvedValueOnce(orders);
 
       const response = await ordersController.findAll(req);
+
+      expect(findMock.mock.calls[0][0].where).toEqual({
+        customerId: customerMother.customer._id,
+      });
 
       expect(response).toEqual([
         orderMother.lunch.withIdUnderfined().withOrderProductsAsUnderfined(),
         orderMother.dinner.withIdUnderfined().withOrderProductsAsUnderfined(),
-        orderMother.sugar_overdose.withIdUnderfined().withOrderProductsAsUnderfined(),
+        orderMother.sugar_overdose
+          .withIdUnderfined()
+          .withOrderProductsAsUnderfined(),
       ]);
+      expect(response).toBeJSONStringifiable();
     });
   });
 
@@ -171,6 +187,7 @@ describe("/orders", () => {
       const response = await ordersController.findOne(order.id);
 
       expect(response).toEqual(order.withOrderProductsAsUnderfined());
+      expect(response).toBeJSONStringifiable();
     });
     it("should error when don't exists", async () => {
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
@@ -202,6 +219,7 @@ describe("/orders", () => {
       });
 
       expect(response).toEqual(updatedOrder);
+      expect(response).toBeJSONStringifiable();
     });
 
     it("should error when dont exists", async () => {

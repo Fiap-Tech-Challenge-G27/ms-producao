@@ -56,6 +56,7 @@ defineFeature(feature, (test) => {
 
     given("I get the list of products", async () => {
       expect(response).toEqual(expectedProducts);
+      expect(response).toBeJSONStringifiable();
     });
   });
 });

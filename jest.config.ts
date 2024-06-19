@@ -11,7 +11,9 @@ export default async (): Promise<Config.InitialOptions> => {
     testEnvironment: "node",
     verbose: true,
     moduleFileExtensions: ["js", "json", "ts"],
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {prefix: __dirname}),
+    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+      prefix: __dirname,
+    }),
     rootDir: ".",
     testRegex: ".*\\.(spec|steps)\\.ts$",
     transform: {
@@ -19,13 +21,17 @@ export default async (): Promise<Config.InitialOptions> => {
     },
     collectCoverageFrom: ["src/**/*.(t|j)s"],
     coverageDirectory: "./coverage",
-    reporters: ['default',  ['jest-sonar', {
-      outputDirectory: "coverage",
-      outputName: "test-reporter.xml"
-    }]],
-    coveragePathIgnorePatterns: [
-      "app.module.ts",
-      "main.ts"
-    ]
+    reporters: [
+      "default",
+      [
+        "jest-sonar",
+        {
+          outputDirectory: "coverage",
+          outputName: "test-reporter.xml",
+        },
+      ],
+    ],
+    coveragePathIgnorePatterns: ["app.module.ts", "main.ts"],
+    setupFilesAfterEnv: ["./src/shared/tests/setup.ts"],
   };
 };
