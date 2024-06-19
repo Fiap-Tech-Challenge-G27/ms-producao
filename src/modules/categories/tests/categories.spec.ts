@@ -52,6 +52,7 @@ describe("/categories", () => {
       );
 
       expect(response).toEqual(category);
+      expect(response).toBeJSONStringifiable();
     });
 
     it("should error when exists", async () => {
@@ -88,6 +89,7 @@ describe("/categories", () => {
       const response = await categoriesController.findAll();
 
       expect(response).toEqual(categories);
+      expect(response).toBeJSONStringifiable();
     });
   });
 
@@ -101,6 +103,7 @@ describe("/categories", () => {
       const response = await categoriesController.findOne(category.slug);
 
       expect(response).toEqual(category);
+      expect(response).toBeJSONStringifiable();
     });
 
     it("should error if not exists", async () => {
@@ -129,6 +132,7 @@ describe("/categories", () => {
       });
 
       expect(response).toEqual(updatedCategory.withoutCircularReference());
+      expect(response).toBeJSONStringifiable();
     });
 
     it("should error when dont exists", async () => {

@@ -10,7 +10,7 @@ app = Flask(__name__)
 def auth():
 
     mocked_user = {
-        "id": "b7813eea-c11d-43f6-ba61-2b84d725128f",
+        "_id": "b7813eea-c11d-43f6-ba61-2b84d725128f",
         "name": "mocked user",
         "email": "user@mock.com",
         "cpf": "28706384340",

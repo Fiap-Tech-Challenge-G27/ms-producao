@@ -21,7 +21,7 @@ export class OrderProxy extends OrderEntity {
       ([project, number]) => new OrderProductEntity(project, number)
     );
 
-    super(customerMother.customer.id, orderProducts, state, paymentState);
+    super(customerMother.customer._id, orderProducts, state, paymentState);
 
     for (let orderProductAmount of this.orderProductsAmounts) {
       orderProductAmount.order_id = this.id;

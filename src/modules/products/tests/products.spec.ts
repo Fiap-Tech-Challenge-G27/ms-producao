@@ -58,6 +58,7 @@ describe("/products", () => {
       const response = await productsController.create(product.asCreateDTO());
 
       expect(response).toEqual(product);
+      expect(response).toBeJSONStringifiable();
     });
     it("should error if category dont exists", async () => {
       const product = productMother.cake;
@@ -80,6 +81,7 @@ describe("/products", () => {
       const response = await productsController.findAll();
 
       expect(response).toEqual(products);
+      expect(response).toBeJSONStringifiable();
     });
   });
 
@@ -102,6 +104,7 @@ describe("/products", () => {
       });
 
       expect(response).toEqual(updatedProduct);
+      expect(response).toBeJSONStringifiable();
     });
 
     it("should error when dont exists", async () => {
@@ -133,6 +136,7 @@ describe("/products", () => {
       const response = await productsController.remove(product.id);
 
       expect(response).toEqual(updatedResult);
+      expect(response).toBeJSONStringifiable();
     });
     it("should error when dont exists", async () => {
       jest.spyOn(productRepositoryMock, "findOne").mockResolvedValue(null);
