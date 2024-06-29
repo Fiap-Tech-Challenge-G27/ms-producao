@@ -1,12 +1,13 @@
-import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { randomId } from "@shared/tests/random";
+import { ConfigService } from "@nestjs/config";
+import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
 import { PaymentGateway } from "./payment-gateway";
 
-describe("payment-gateway", () => {
-  const payment_url = "mock_payment_url";
+jest.mock("@aws-sdk/client-sns");
+
+describe("PaymentGateway", () => {
   let paymentGateway: PaymentGateway;
-  const fetchMock = jest.spyOn(global, "fetch").mockResolvedValue(null);
+  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,29 +15,31 @@ describe("payment-gateway", () => {
         PaymentGateway,
         {
           provide: ConfigService,
-          useValue: { get: jest.fn().mockReturnValue(payment_url) },
+          useValue: {
+            get: jest.fn().mockReturnValue("mock-topic-arn"),
+          },
         },
       ],
     }).compile();
 
     paymentGateway = module.get<PaymentGateway>(PaymentGateway);
+    configService = module.get<ConfigService>(ConfigService);
   });
 
-  it("should request made", () => {
-    const orderId = randomId();
+  it("should be defined", () => {
+    expect(paymentGateway).toBeDefined();
+  });
 
-    paymentGateway.create(orderId)
-    
-    const calls = fetchMock.mock.calls
+  it("should publish message to SNS", async () => {
+    const orderId = "12345";
+    const mockResponse = { MessageId: "mock-message-id" };
 
-    expect(calls.length).toBe(1)
+    const snsClient = SNSClient.prototype;
+    snsClient.send = jest.fn().mockResolvedValue(mockResponse);
 
-    const [actual_payment_url, request] = calls[0]
+    await paymentGateway.create(orderId);
 
-    expect(actual_payment_url).toBe(payment_url)
-
-    expect(request['method']).toBe("POST")
-    
-    expect(request['body']).toBe(JSON.stringify({"identifier": {orderId}}))
-  })
+    expect(snsClient.send).toHaveBeenCalledWith(expect.any(PublishCommand));
+    expect(snsClient.send).toHaveBeenCalledTimes(1);
+  });
 });
