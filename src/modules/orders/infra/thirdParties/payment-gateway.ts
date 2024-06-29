@@ -9,12 +9,9 @@ export class PaymentGateway implements IPaymentGateway {
   constructor(private configService: ConfigService) {}
 
   async create(orderId: string) {
-    AWS.config.update({
-      region: this.configService.get<string>("AWS_REGION"),
-    });
-
     try {
       const sns = new AWS.SNS({
+        region: this.configService.get<string>("AWS_REGION"),
         apiVersion: this.configService.get<string>("AWS_SNS_API_VERSION"),
       });
 
