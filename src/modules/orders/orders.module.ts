@@ -15,7 +15,7 @@ import { IProductRepository } from "../products/core/product-repository.abstract
 import { OrdersController } from "./controller/orders.controller";
 import { IOrderRepository } from "./core/order-repository.abstract";
 import { IPaymentGateway } from "./core/payment-gateway";
-import { PaymentGateway } from "./infra/typeorm/thirdParties/payment-gateway";
+import { PaymentGateway } from "./infra/thirdParties/payment-gateway";
 import { ConfirmatePaymentUseCase } from "./use-cases/confimate-payment.usecase";
 import { CreateOrderUseCase } from "./use-cases/create-order.usecase";
 import { FindAllOrdersUseCase } from "./use-cases/find-all-orders.usecase";
