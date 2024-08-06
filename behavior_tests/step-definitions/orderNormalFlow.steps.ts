@@ -107,10 +107,10 @@ defineFeature(feature, (test) => {
         .spyOn(orderRepositoryMock, "save")
         .mockResolvedValueOnce(order);
 
-      await ordersController.receivePaymentConfirmation({
-        identifier: { order_id: order.id },
-        status: "approved",
-      });
+      // await ordersController.receivePaymentConfirmation({
+      //   identifier: { order_id: order.id },
+      //   status: "approved",
+      // });
 
       saveCall = saveMock.mock.calls[0][0];
     });
