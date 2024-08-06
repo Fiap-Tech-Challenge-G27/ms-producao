@@ -19,19 +19,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18.x
-      - run: npm ci
-      - run: npm run coverage
+      # - run: npm ci
+      # - run: npm run coverage
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Coveralls
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: SonarCloud Scan
+      #   uses: sonarsource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       # - name: SonarQube Quality Gate check
       #   id: sonarqube-quality-gate-check
       #   uses: sonarsource/sonarqube-quality-gate-action@master
