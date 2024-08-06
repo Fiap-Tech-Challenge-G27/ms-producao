@@ -65,6 +65,8 @@ export class OrdersController {
   @Post("/payment-confirmation")
   async handleSnsMessage(@Headers() headers, @Body() body): Promise<any> {
     const messageType = headers['x-amz-sns-message-type'];
+    console.log(body);
+    console.log(messageType);
 
     if (messageType === 'SubscriptionConfirmation') {
       console.log('SNS Notification:', body);
