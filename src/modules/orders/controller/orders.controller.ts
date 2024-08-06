@@ -65,14 +65,14 @@ export class OrdersController {
   @Post("/payment-confirmation")
   async handleSnsMessage(@Headers() headers, @Body() body: string): Promise<any> {
     const messageType = headers['x-amz-sns-message-type'];
-    console.log(JSON.parse(body));
+    console.log(body);
     console.log(messageType);
 
     if (messageType === 'SubscriptionConfirmation') {
-      console.log('SNS Notification:', JSON.parse(body));
+      console.log('SNS Notification:', body);
 
-      const topicArn = JSON.parse(body)["topicArn"];
-      const token = JSON.parse(body)["token"];
+      const topicArn = body["topicArn"];
+      const token = body["token"];
 
       const url = `https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=${topicArn}&Token=${token}`;
       await axios.get(url);
@@ -80,10 +80,10 @@ export class OrdersController {
       // Handle subscription confirmation (verify the token with AWS and subscribe the endpoint)
     } else if (messageType === 'Notification') {
 
-      console.log('SNS Notification:', JSON.parse(body));
+      console.log('SNS Notification:', body);
 
-      const orderId = JSON.parse(body)["identifier"]["orderId"];
-      const status = JSON.parse(body)["status"];
+      const orderId = body["identifier"]["orderId"];
+      const status = body["status"];
 
       return this.confirmatePaymentUseCase.execute(orderId, status);
 
