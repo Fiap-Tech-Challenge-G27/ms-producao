@@ -8,6 +8,7 @@ import {
   Post,
   Request,
   UseGuards,
+  Headers
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateOrderDto } from "@orders/dtos/create-order.dto";
@@ -18,6 +19,7 @@ import { FindOrderUseCase } from "../use-cases/find-order.usecase";
 import { UpdateOrderUseCase } from "../use-cases/update-order.usecase";
 import { CreateOrderUseCase } from "./../use-cases/create-order.usecase";
 import { FindAllOrdersUseCase } from "./../use-cases/find-all-orders.usecase";
+import axios from 'axios';
 
 @ApiTags("orders")
 @Controller("orders")
@@ -60,13 +62,42 @@ export class OrdersController {
     return this.updateOrderUseCase.execute(orderId, statusDto);
   }
 
-  @Post("/webhooks/payment-confirmation")
-  receivePaymentConfirmation(
-    @Body() payment_confirmation: PaymentConfirmationDto,
-  ): Promise<void> {
-    const orderId = payment_confirmation["identifier"]["orderId"];
-    const status = payment_confirmation["status"];
+  @Post("/payment-confirmation")
+  async handleSnsMessage(@Headers() headers, @Body() body): Promise<any> {
+    const messageType = headers['x-amz-sns-message-type'];
 
-    return this.confirmatePaymentUseCase.execute(orderId, status);
+    if (messageType === 'SubscriptionConfirmation') {
+      console.log('SNS Notification:', body);
+
+      const topicArn = body["topicArn"];
+      const token = body["token"];
+
+      const url = `https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=${topicArn}&Token=${token}`;
+      await axios.get(url);
+
+      // Handle subscription confirmation (verify the token with AWS and subscribe the endpoint)
+    } else if (messageType === 'Notification') {
+
+      console.log('SNS Notification:', body);
+
+      const orderId = body["identifier"]["orderId"];
+      const status = body["status"];
+
+      return this.confirmatePaymentUseCase.execute(orderId, status);
+
+    }
+
+    return { status: 'OK' };
   }
+
+  
+
+  // receivePaymentConfirmation(
+  //   @Body() payment_confirmation: PaymentConfirmationDto,
+  // ): Promise<void> {
+  //   const orderId = payment_confirmation["identifier"]["orderId"];
+  //   const status = payment_confirmation["status"];
+
+  //   return this.confirmatePaymentUseCase.execute(orderId, status);
+  // }
 }
