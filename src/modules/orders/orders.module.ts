@@ -1,5 +1,5 @@
 import { Category } from "@categories/infra/typeorm/entities/category";
-import { Module, Provider } from "@nestjs/common";
+import { Module, Provider, MiddlewareConsumer } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { OrderProductMapper } from "@orders/core/mappers/order-product.mapper";
@@ -21,6 +21,7 @@ import { CreateOrderUseCase } from "./use-cases/create-order.usecase";
 import { FindAllOrdersUseCase } from "./use-cases/find-all-orders.usecase";
 import { FindOrderUseCase } from "./use-cases/find-order.usecase";
 import { UpdateOrderUseCase } from "./use-cases/update-order.usecase";
+import { SNSConfirmationMiddleware } from 'src/shared/sns/SNSConfirmationMiddleware';
 
 const basicProductModuleMetadata = {
   controllers: [OrdersController],
@@ -58,6 +59,12 @@ const basicProductModuleMetadata = {
   ],
   ...basicProductModuleMetadata,
 })
-class OrdersModule {}
+class OrdersModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SNSConfirmationMiddleware)
+      .forRoutes('orders/payment-confirmation');
+  }
+}
 
 export { OrdersModule, basicProductModuleMetadata };
