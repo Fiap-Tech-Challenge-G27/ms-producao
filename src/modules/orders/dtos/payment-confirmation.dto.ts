@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 class PaymentConfirmationIdentifierDto {
   @ApiProperty()
-  order_id: string;
+  orderId: string;
 }
 export class PaymentConfirmationDto {
   @ApiProperty({ type: PaymentConfirmationIdentifierDto })
