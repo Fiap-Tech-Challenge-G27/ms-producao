@@ -21,7 +21,7 @@ import { CreateOrderUseCase } from "./use-cases/create-order.usecase";
 import { FindAllOrdersUseCase } from "./use-cases/find-all-orders.usecase";
 import { FindOrderUseCase } from "./use-cases/find-order.usecase";
 import { UpdateOrderUseCase } from "./use-cases/update-order.usecase";
-import { SNSConfirmationMiddleware } from 'src/shared/sns/SNSConfirmationMiddleware';
+import { SNSConfirmationMiddleware } from '@shared/sns/SNSConfirmationMiddleware';
 
 const basicProductModuleMetadata = {
   controllers: [OrdersController],

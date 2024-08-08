@@ -14,6 +14,7 @@ services:
   postgres:
     container_name: database
     image: postgres:16-alpine
+    attach: false
     env_file:
       - .env
     ports:
@@ -24,6 +25,7 @@ services:
   jwt_token_mock:
     build:
       context: doubles/jwt_token_mock/
+    attach: false
     ports:
       - 3001:3001
     env_file:
