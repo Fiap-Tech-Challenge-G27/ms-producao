@@ -96,10 +96,12 @@ describe("/orders", () => {
       const saveMock = jest
         .spyOn(orderRepositoryMock, "save")
         .mockResolvedValueOnce(order);
-      const response = await ordersController.receivePaymentConfirmation({
-        identifier: { order_id: order.id },
+
+      const response = await ordersController.confirmPayment({
+        identifier: { orderId: order.id },
         status: confirmationStatus,
       });
+
       const call = saveMock.mock.calls[0][0];
       expect(Object.keys(call)).toContain("state");
       expect(call["state"]).toBe(expectedState);
@@ -258,11 +260,11 @@ describe("/orders", () => {
 
     it("should error when dont exists", async () => {
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
-
+      const response = 
       expect(
         async () =>
-          await ordersController.receivePaymentConfirmation({
-            identifier: { order_id: orderMother.sugar_overdose.id },
+          ordersController.confirmPayment({
+            identifier: { orderId: orderMother.sugar_overdose.id },
             status: "canceled",
           })
       ).rejects.toThrow("Order not found");
