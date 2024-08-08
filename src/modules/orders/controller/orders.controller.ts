@@ -66,8 +66,8 @@ export class OrdersController {
   async confirmPayment(@Body() payment_confirmation: PaymentConfirmationDto): Promise<void> {
 
     console.log(payment_confirmation);
-    const orderId = payment_confirmation["identifier"]["orderId"];
-    const status = payment_confirmation["status"];
+    const orderId = payment_confirmation.identifier.orderId;
+    const status = payment_confirmation.status;
     
     return this.confirmatePaymentUseCase.execute(orderId, status);
 
