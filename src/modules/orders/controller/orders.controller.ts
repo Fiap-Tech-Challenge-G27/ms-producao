@@ -77,14 +77,4 @@ export class OrdersController {
 
   }
 
-  
-
-  // receivePaymentConfirmation(
-  //   @Body() payment_confirmation: PaymentConfirmationDto,
-  // ): Promise<void> {
-  //   const orderId = payment_confirmation["identifier"]["orderId"];
-  //   const status = payment_confirmation["status"];
-
-  //   return this.confirmatePaymentUseCase.execute(orderId, status);
-  // }
 }
