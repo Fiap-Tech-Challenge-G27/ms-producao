@@ -211,8 +211,10 @@ describe("/orders", () => {
         .withPaymentState(paymentState);
 
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(order);
+      jest.spyOn(orderRepositoryMock, "save").mockResolvedValueOnce(updatedOrder);
+
       jest
-        .spyOn(orderRepositoryMock, "save")
+        .spyOn(orderRepositoryMock, "findOne")
         .mockResolvedValueOnce(updatedOrder);
 
       const response = await ordersController.updateOrderStatus(order.id, {
@@ -220,7 +222,7 @@ describe("/orders", () => {
         paymentState,
       });
 
-      expect(response).toEqual(updatedOrder);
+      expect(response).toEqual(updatedOrder.withOrderProductsAsUnderfined());
       expect(response).toBeJSONStringifiable();
     });
 
@@ -260,13 +262,11 @@ describe("/orders", () => {
 
     it("should error when dont exists", async () => {
       jest.spyOn(orderRepositoryMock, "findOne").mockResolvedValueOnce(null);
-      const response = 
-      expect(
-        async () =>
-          ordersController.confirmPayment({
-            identifier: { orderId: orderMother.sugar_overdose.id },
-            status: "canceled",
-          })
+      const response = expect(async () =>
+        ordersController.confirmPayment({
+          identifier: { orderId: orderMother.sugar_overdose.id },
+          status: "canceled",
+        })
       ).rejects.toThrow("Order not found");
     });
   });

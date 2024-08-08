@@ -102,7 +102,9 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async update(id: string, order: OrderEntity): Promise<OrderEntity> {
-    return this.orderRepository.save(this.mapEntityToModel(order));
+    await this.orderRepository.save(this.mapEntityToModel(order));
+
+    return this.findOne(id);
   }
 
   mapModelToEntity(orderModel: Order): OrderEntity {
