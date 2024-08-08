@@ -8,7 +8,7 @@ import {
   Post,
   Request,
   UseGuards,
-  Headers
+  Headers,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateOrderDto } from "@orders/dtos/create-order.dto";
@@ -19,7 +19,7 @@ import { FindOrderUseCase } from "../use-cases/find-order.usecase";
 import { UpdateOrderUseCase } from "../use-cases/update-order.usecase";
 import { CreateOrderUseCase } from "./../use-cases/create-order.usecase";
 import { FindAllOrdersUseCase } from "./../use-cases/find-all-orders.usecase";
-import axios from 'axios';
+import axios from "axios";
 
 @ApiTags("orders")
 @Controller("orders")
@@ -29,7 +29,7 @@ export class OrdersController {
     private readonly findAllOrdersUseCase: FindAllOrdersUseCase,
     private readonly findOrderUseCase: FindOrderUseCase,
     private readonly confirmatePaymentUseCase: ConfirmatePaymentUseCase,
-    private readonly updateOrderUseCase: UpdateOrderUseCase, //private readonly updateOrderPaymentStateUseCase: UpdateOrderPaymentStateUseCase,
+    private readonly updateOrderUseCase: UpdateOrderUseCase //private readonly updateOrderPaymentStateUseCase: UpdateOrderPaymentStateUseCase,
   ) {}
 
   @Post()
@@ -38,7 +38,7 @@ export class OrdersController {
   async create(@Body() createOrdersDto: CreateOrderDto, @Request() req) {
     return await this.createOrderUseCase.execute(
       createOrdersDto,
-      req.customer.data._id,
+      req.customer.data._id
     );
   }
 
@@ -57,24 +57,18 @@ export class OrdersController {
   @Patch("/:id/state")
   updateOrderStatus(
     @Param("id") orderId: string,
-    @Body() statusDto: UpdateOrderDto,
+    @Body() statusDto: UpdateOrderDto
   ) {
     return this.updateOrderUseCase.execute(orderId, statusDto);
   }
 
   @Post("/payment-confirmation")
-  async confirmPayment(@Body() payment_confirmation: PaymentConfirmationDto): Promise<void> {
-
-    console.log(payment_confirmation);
-    
+  async confirmPayment(
+    @Body() payment_confirmation: PaymentConfirmationDto
+  ): Promise<void> {
     const orderId = payment_confirmation.identifier.orderId;
     const status = payment_confirmation.status;
 
-    console.log(orderId);
-    console.log(status);
-    
     return this.confirmatePaymentUseCase.execute(orderId, status);
-
   }
-
 }

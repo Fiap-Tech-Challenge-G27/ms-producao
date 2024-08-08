@@ -102,7 +102,7 @@ export class OrderRepository implements IOrderRepository {
   }
 
   async update(id: string, order: OrderEntity): Promise<OrderEntity> {
-    return this.orderRepository.save(order);
+    return this.orderRepository.save(this.mapEntityToModel(order));
   }
 
   mapModelToEntity(orderModel: Order): OrderEntity {
@@ -110,8 +110,8 @@ export class OrderRepository implements IOrderRepository {
       orderModel.customerId,
       orderModel.orderProductsAmounts.map(function (item) {
         const productItem = item.product;
-        
-        if(productItem) {
+
+        if (productItem) {
           const categoryItem = item.product.category;
           let category: CategoryEntity = undefined;
 
@@ -130,7 +130,7 @@ export class OrderRepository implements IOrderRepository {
           const product = new ProductEntity(
             productItem.name,
             productItem.description,
-  
+
             productItem.price,
             productItem.quantity,
             productItem.status,
@@ -142,8 +142,8 @@ export class OrderRepository implements IOrderRepository {
           );
           return new OrderProductEntity(product, item.amount);
         }
-        
-        return undefined
+
+        return undefined;
       }),
       orderModel.state,
       orderModel.paymentState
@@ -158,6 +158,7 @@ export class OrderRepository implements IOrderRepository {
 
   mapEntityToModel(dataEntity: OrderEntity): Order {
     const orderModel = new Order();
+    orderModel.id = dataEntity.id;
     orderModel.state = dataEntity.state;
     orderModel.paymentState = dataEntity.paymentState;
     orderModel.customerId = dataEntity.customerId;
